@@ -5,12 +5,14 @@ import { easeOutExpo } from "../util/easings.js";
 //   return Math.min(1, 1.001 - Math.pow(2, -10 * x));
 // }
 
+const lenisBase = (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
 export class Scroll extends Lenis {
   constructor() {
     super({
-      duration: 1,
+      duration: 1.2,
       smoothWheel: true,
-      easing: easeOutExpo,
+      easing: lenisBase,
       orientation: "vertical",
       smoothTouch: false,
       touchMultiplier: 2,

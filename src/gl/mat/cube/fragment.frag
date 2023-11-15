@@ -12,6 +12,7 @@ uniform sampler2D u_mtc2;
 vec3 COL_RED = vec3(1., 0., 0.);
 vec3 COL_YEL = vec3(1., 1., 0.);
 vec3 COL_BLU = vec3(0., 0., 1.);
+vec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);
 
 void main() {
 
@@ -27,6 +28,8 @@ void main() {
     float mixing_value = (1. - fakeUv.y);
     vec3 mtc = mix(mtc1, mtc2, split);
     mtc = mix(mtc, mtc2, split * mixing_value);
+
+    mtc = mix(COL_BG * .9, vec3(1.), mtc);
 
 
     gl_FragColor.rgb = mtc;

@@ -720,7 +720,7 @@
       ratioY = from[1];
     }
     return function(i2, target, a) {
-      var l = (a || vars).length, distances = cache[l], originX, originY, x, y, d, j, max, min, wrapAt;
+      var l = (a || vars).length, distances = cache[l], originX, originY, x, y, d2, j, max, min, wrapAt;
       if (!distances) {
         wrapAt = vars.grid === "auto" ? 0 : (vars.grid || [1, _bigNum])[1];
         if (!wrapAt) {
@@ -737,9 +737,9 @@
         for (j = 0; j < l; j++) {
           x = j % wrapAt - originX;
           y = originY - (j / wrapAt | 0);
-          distances[j] = d = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
-          d > max && (max = d);
-          d < min && (min = d);
+          distances[j] = d2 = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
+          d2 > max && (max = d2);
+          d2 < min && (min = d2);
         }
         from === "random" && shuffle(distances);
         distances.max = max - min;
@@ -993,7 +993,7 @@
     return (h * 6 < 1 ? m1 + (m2 - m1) * h * 6 : h < 0.5 ? m2 : h * 3 < 2 ? m1 + (m2 - m1) * (2 / 3 - h) * 6 : m1) * _255 + 0.5 | 0;
   };
   var splitColor = function splitColor2(v, toHSL, forceAlpha) {
-    var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h, s2, l, max, min, d, wasHSL;
+    var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h, s2, l, max, min, d2, wasHSL;
     if (!a) {
       if (v.substr(-1) === ",") {
         v = v.substr(0, v.length - 1);
@@ -1045,9 +1045,9 @@
       if (max === min) {
         h = s2 = 0;
       } else {
-        d = max - min;
-        s2 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        h = max === r2 ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r2) / d + 2 : (r2 - g) / d + 4;
+        d2 = max - min;
+        s2 = l > 0.5 ? d2 / (2 - max - min) : d2 / (max + min);
+        h = max === r2 ? (g - b) / d2 + (g < b ? 6 : 0) : max === g ? (b - r2) / d2 + 2 : (r2 - g) / d2 + 4;
         h *= 60;
       }
       a[0] = ~~(h + 0.5);
@@ -1068,7 +1068,7 @@
     return values;
   };
   var _formatColors = function _formatColors2(s2, toHSL, orderMatchData) {
-    var result = "", colors = (s2 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i2 = 0, c, shell, d, l;
+    var result = "", colors = (s2 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i2 = 0, c, shell, d2, l;
     if (!colors) {
       return s2;
     }
@@ -1076,13 +1076,13 @@
       return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
     });
     if (orderMatchData) {
-      d = _colorOrderData(s2);
+      d2 = _colorOrderData(s2);
       c = orderMatchData.c;
-      if (c.join(result) !== d.c.join(result)) {
+      if (c.join(result) !== d2.c.join(result)) {
         shell = s2.replace(_colorExp, "1").split(_numWithUnitExp);
         l = shell.length - 1;
         for (; i2 < l; i2++) {
-          result += shell[i2] + (~c.indexOf(i2) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
+          result += shell[i2] + (~c.indexOf(i2) ? colors.shift() || type + "0,0,0,0)" : (d2.length ? d2 : colors.length ? colors : orderMatchData).shift());
         }
       }
     }
@@ -1177,8 +1177,8 @@
         _nextTime = _self.time * 1e3 + _gap;
       },
       add: function add4(callback, once, prioritize) {
-        var func = once ? function(t2, d, f, v) {
-          callback(t2, d, f, v);
+        var func = once ? function(t2, d2, f, v) {
+          callback(t2, d2, f, v);
           _self.remove(func);
         } : callback;
         _self.remove(callback);
@@ -3841,13 +3841,13 @@
     return force2D && matrix.length > 6 ? [matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]] : matrix;
   };
   var _applySVGOrigin = function _applySVGOrigin2(target, origin, originIsAbsolute, smooth, matrixArray, pluginToAddPropTweensTo) {
-    var cache = target._gsap, matrix = matrixArray || _getMatrix(target, true), xOriginOld = cache.xOrigin || 0, yOriginOld = cache.yOrigin || 0, xOffsetOld = cache.xOffset || 0, yOffsetOld = cache.yOffset || 0, a = matrix[0], b = matrix[1], c = matrix[2], d = matrix[3], tx = matrix[4], ty = matrix[5], originSplit = origin.split(" "), xOrigin = parseFloat(originSplit[0]) || 0, yOrigin = parseFloat(originSplit[1]) || 0, bounds, determinant2, x, y;
+    var cache = target._gsap, matrix = matrixArray || _getMatrix(target, true), xOriginOld = cache.xOrigin || 0, yOriginOld = cache.yOrigin || 0, xOffsetOld = cache.xOffset || 0, yOffsetOld = cache.yOffset || 0, a = matrix[0], b = matrix[1], c = matrix[2], d2 = matrix[3], tx = matrix[4], ty = matrix[5], originSplit = origin.split(" "), xOrigin = parseFloat(originSplit[0]) || 0, yOrigin = parseFloat(originSplit[1]) || 0, bounds, determinant2, x, y;
     if (!originIsAbsolute) {
       bounds = _getBBox(target);
       xOrigin = bounds.x + (~originSplit[0].indexOf("%") ? xOrigin / 100 * bounds.width : xOrigin);
       yOrigin = bounds.y + (~(originSplit[1] || originSplit[0]).indexOf("%") ? yOrigin / 100 * bounds.height : yOrigin);
-    } else if (matrix !== _identity2DMatrix && (determinant2 = a * d - b * c)) {
-      x = xOrigin * (d / determinant2) + yOrigin * (-c / determinant2) + (c * ty - d * tx) / determinant2;
+    } else if (matrix !== _identity2DMatrix && (determinant2 = a * d2 - b * c)) {
+      x = xOrigin * (d2 / determinant2) + yOrigin * (-c / determinant2) + (c * ty - d2 * tx) / determinant2;
       y = xOrigin * (-b / determinant2) + yOrigin * (a / determinant2) - (a * ty - b * tx) / determinant2;
       xOrigin = x;
       yOrigin = y;
@@ -3856,7 +3856,7 @@
       tx = xOrigin - xOriginOld;
       ty = yOrigin - yOriginOld;
       cache.xOffset = xOffsetOld + (tx * a + ty * c) - tx;
-      cache.yOffset = yOffsetOld + (tx * b + ty * d) - ty;
+      cache.yOffset = yOffsetOld + (tx * b + ty * d2) - ty;
     } else {
       cache.xOffset = cache.yOffset = 0;
     }
@@ -3879,7 +3879,7 @@
     if ("x" in cache && !uncache && !cache.uncache) {
       return cache;
     }
-    var style = target.style, invertedScaleX = cache.scaleX < 0, px = "px", deg = "deg", cs = getComputedStyle(target), origin = _getComputedProperty(target, _transformOriginProp) || "0", x, y, z, scaleX, scaleY, rotation, rotationX, rotationY, skewX, skewY, perspective2, xOrigin, yOrigin, matrix, angle2, cos, sin, a, b, c, d, a12, a22, t1, t2, t3, a13, a23, a33, a42, a43, a32;
+    var style = target.style, invertedScaleX = cache.scaleX < 0, px = "px", deg = "deg", cs = getComputedStyle(target), origin = _getComputedProperty(target, _transformOriginProp) || "0", x, y, z, scaleX, scaleY, rotation, rotationX, rotationY, skewX, skewY, perspective2, xOrigin, yOrigin, matrix, angle2, cos, sin, a, b, c, d2, a12, a22, t1, t2, t3, a13, a23, a33, a42, a43, a32;
     x = y = z = rotation = rotationX = rotationY = skewX = skewY = perspective2 = 0;
     scaleX = scaleY = 1;
     cache.svg = !!(target.getCTM && _isSVG(target));
@@ -3906,18 +3906,18 @@
       a = matrix[0];
       b = matrix[1];
       c = matrix[2];
-      d = matrix[3];
+      d2 = matrix[3];
       x = a12 = matrix[4];
       y = a22 = matrix[5];
       if (matrix.length === 6) {
         scaleX = Math.sqrt(a * a + b * b);
-        scaleY = Math.sqrt(d * d + c * c);
+        scaleY = Math.sqrt(d2 * d2 + c * c);
         rotation = a || b ? _atan2(b, a) * _RAD2DEG : 0;
-        skewX = c || d ? _atan2(c, d) * _RAD2DEG + rotation : 0;
+        skewX = c || d2 ? _atan2(c, d2) * _RAD2DEG + rotation : 0;
         skewX && (scaleY *= Math.abs(Math.cos(skewX * _DEG2RAD)));
         if (cache.svg) {
           x -= xOrigin - (xOrigin * a + yOrigin * c);
-          y -= yOrigin - (xOrigin * b + yOrigin * d);
+          y -= yOrigin - (xOrigin * b + yOrigin * d2);
         }
       } else {
         a32 = matrix[6];
@@ -3953,7 +3953,7 @@
           t1 = a * cos - a13 * sin;
           t2 = b * cos - a23 * sin;
           t3 = c * cos - a33 * sin;
-          a43 = d * sin + a43 * cos;
+          a43 = d2 * sin + a43 * cos;
           a = t1;
           b = t2;
           c = t3;
@@ -4830,7 +4830,7 @@
         addClass: "active"
       });
       this.anim = {
-        d: 1.2,
+        duration: 1.2,
         ease: "expo.out",
         delay: 0.1,
         stagger: {
@@ -4905,7 +4905,7 @@
   function returnSplit(element) {
     switch (element.dataset.a) {
       case "char":
-        return splitChar(element);
+        return splitWord(element);
         break;
       case "word":
         return splitWord(element);
@@ -5111,7 +5111,7 @@
     }
   };
   var r = class {
-    constructor({ wrapper: i2 = window, content: r2 = document.documentElement, wheelEventsTarget: l = i2, eventsTarget: h = l, smoothWheel: a = true, smoothTouch: c = false, syncTouch: u = false, syncTouchLerp: p = 0.1, __iosNoInertiaSyncTouchLerp: d = 0.4, touchInertiaMultiplier: m = 35, duration: v, easing: g = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: S = !v && 0.1, infinite: w = false, orientation: f = "vertical", gestureOrientation: y = "vertical", touchMultiplier: T = 1, wheelMultiplier: z = 1, normalizeWheel: M = false, autoResize: b = true } = {}) {
+    constructor({ wrapper: i2 = window, content: r2 = document.documentElement, wheelEventsTarget: l = i2, eventsTarget: h = l, smoothWheel: a = true, smoothTouch: c = false, syncTouch: u = false, syncTouchLerp: p = 0.1, __iosNoInertiaSyncTouchLerp: d2 = 0.4, touchInertiaMultiplier: m = 35, duration: v, easing: g = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: S = !v && 0.1, infinite: w = false, orientation: f = "vertical", gestureOrientation: y = "vertical", touchMultiplier: T = 1, wheelMultiplier: z = 1, normalizeWheel: M = false, autoResize: b = true } = {}) {
       this.onVirtualScroll = ({ deltaX: i3, deltaY: e2, event: s2 }) => {
         if (s2.ctrlKey)
           return;
@@ -5138,7 +5138,7 @@
           const t2 = this.animatedScroll;
           this.animatedScroll = this.targetScroll = this.actualScroll, this.velocity = 0, this.direction = Math.sign(this.animatedScroll - t2), this.emit();
         }
-      }, window.lenisVersion = "1.0.26", i2 !== document.documentElement && i2 !== document.body || (i2 = window), this.options = { wrapper: i2, content: r2, wheelEventsTarget: l, eventsTarget: h, smoothWheel: a, smoothTouch: c, syncTouch: u, syncTouchLerp: p, __iosNoInertiaSyncTouchLerp: d, touchInertiaMultiplier: m, duration: v, easing: g, lerp: S, infinite: w, gestureOrientation: y, orientation: f, touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M, autoResize: b }, this.animate = new e(), this.emitter = new o(), this.dimensions = new s({ wrapper: i2, content: r2, autoResize: b }), this.toggleClass("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = u || a || c, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll = new n(h, { touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M }), this.virtualScroll.on("scroll", this.onVirtualScroll);
+      }, window.lenisVersion = "1.0.26", i2 !== document.documentElement && i2 !== document.body || (i2 = window), this.options = { wrapper: i2, content: r2, wheelEventsTarget: l, eventsTarget: h, smoothWheel: a, smoothTouch: c, syncTouch: u, syncTouchLerp: p, __iosNoInertiaSyncTouchLerp: d2, touchInertiaMultiplier: m, duration: v, easing: g, lerp: S, infinite: w, gestureOrientation: y, orientation: f, touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M, autoResize: b }, this.animate = new e(), this.emitter = new o(), this.dimensions = new s({ wrapper: i2, content: r2, autoResize: b }), this.toggleClass("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = u || a || c, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll = new n(h, { touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M }), this.virtualScroll.on("scroll", this.onVirtualScroll);
     }
     destroy() {
       this.emitter.destroy(), this.options.wrapper.removeEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll.destroy(), this.dimensions.destroy(), this.toggleClass("lenis", false), this.toggleClass("lenis-smooth", false), this.toggleClass("lenis-scrolling", false), this.toggleClass("lenis-stopped", false);
@@ -5259,12 +5259,13 @@
   }
 
   // src/modules/scroll.js
+  var lenisBase = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2));
   var Scroll = class extends r {
     constructor() {
       super({
-        duration: 1,
+        duration: 1.2,
         smoothWheel: true,
-        easing: easeOutExpo,
+        easing: lenisBase,
         orientation: "vertical",
         smoothTouch: false,
         touchMultiplier: 2
@@ -10006,7 +10007,7 @@ ${addLineNumbers(fragment2)}`);
   var vertex_default = "#define MPI 3.1415926538\n#define MTAU 6.28318530718\n\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\n\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat3 normalMatrix;\n\nuniform float u_time;\n\nvarying vec3 v_normal;\nvarying vec3 v_view;\nvarying vec2 v_uv;\n\n\nvoid main() {\n  vec3 pos = position;\n\n  vec4 transformed = modelViewMatrix * vec4(pos, 1.0);\n  v_view = normalize(- transformed.xyz);\n  gl_Position = projectionMatrix * transformed;\n\n  v_normal = normalize(normalMatrix * normal);\n  v_uv = uv;\n}\n";
 
   // src/gl/mat/cube/fragment.frag
-  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\n\nvec3 COL_RED = vec3(1., 0., 0.);\nvec3 COL_YEL = vec3(1., 1., 0.);\nvec3 COL_BLU = vec3(0., 0., 1.);\n\nvoid main() {\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n\n\n    gl_FragColor.rgb = mtc;\n    // gl_FragColor.rgb = vec3(split);\n    gl_FragColor.a = 1.0;\n}\n";
+  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\n\nvec3 COL_RED = vec3(1., 0., 0.);\nvec3 COL_YEL = vec3(1., 1., 0.);\nvec3 COL_BLU = vec3(0., 0., 1.);\nvec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);\n\nvoid main() {\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n\n    mtc = mix(COL_BG * .9, vec3(1.), mtc);\n\n\n    gl_FragColor.rgb = mtc;\n    // gl_FragColor.rgb = vec3(split);\n    gl_FragColor.a = 1.0;\n}\n";
 
   // src/gl/mat/cube/index.js
   var cube_default = class extends Program {
@@ -10088,7 +10089,9 @@ ${addLineNumbers(fragment2)}`);
     start = 0;
     a = {
       mx: 0,
-      my: 0
+      my: 0,
+      scale: 0.1,
+      lspeed: 0
     };
     constructor(gl, { mesh, mtc1, mtc2 } = {}) {
       super();
@@ -10102,12 +10105,12 @@ ${addLineNumbers(fragment2)}`);
       this.mesh = mesh;
       this.mesh.children.forEach((m) => m.children[0].program = this.mat);
       this.mesh.setParent(this.ctrl);
-      const scale5 = 0.1;
+      const scale5 = this.a.scale;
       this.mesh.scale.set(scale5, scale5, scale5);
-      let d = 0.8;
+      let d2 = 0.8;
       setInterval(() => {
-        this.scramble(d);
-      }, d * 1100);
+        this.scramble(d2);
+      }, d2 * 1100);
       this.spinner = new Spinner();
     }
     scramble(dur) {
@@ -10128,18 +10131,31 @@ ${addLineNumbers(fragment2)}`);
       });
     }
     render(t2) {
+      this.a.lspeed = lerp3(this.a.lspeed, window.sscroll.speed * 0.01, 0.05);
       this.spinner.render(t2);
       this.rotation.x = -this.spinner.spin.y * 0.1;
       this.rotation.y = this.spinner.spin.x * 0.1;
       this.a.mx = lerp3(this.a.mx, this.spinner.velocity.x, 0.1);
       this.a.my = lerp3(this.a.my, -this.spinner.velocity.y, 0.1);
       this.position.x = this.a.mx * 0.5;
-      this.position.y = this.a.my * 0.5;
+      this.position.y = this.a.my * 0.5 + this.a.lspeed + window.sscroll.percent * 0.8;
+      this.a.scale = 0.08 + window.sscroll.percent * 0.03;
+      this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
       const z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
       this.position.z = -z;
       this.mat.time = t2;
     }
     resize() {
+    }
+    /** Init Events */
+    initEvents() {
+      [...document.querySelectorAll("[data-a='cta']")].forEach(
+        (el) => el.addEventListener("mouseenter", () => this.mouseCta(d))
+      );
+    }
+    /** Animations */
+    mouseCta() {
+      console.log("cta");
     }
   };
 

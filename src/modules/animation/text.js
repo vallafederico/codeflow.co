@@ -17,7 +17,7 @@ export class Text extends Observe {
     });
 
     this.anim = {
-      d: 1.2,
+      duration: 1.2,
       ease: "expo.out",
       delay: 0.1,
       stagger: {
@@ -99,7 +99,7 @@ export class Text extends Observe {
 function returnSplit(element) {
   switch (element.dataset.a) {
     case "char":
-      return splitChar(element);
+      return splitWord(element);
       break;
     case "word":
       return splitWord(element);

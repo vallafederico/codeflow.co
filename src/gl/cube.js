@@ -9,6 +9,8 @@ export class Cube extends Transform {
   a = {
     mx: 0,
     my: 0,
+    scale: 0.1,
+    lspeed: 0,
   };
 
   constructor(gl, { mesh, mtc1, mtc2 } = {}) {
@@ -25,7 +27,7 @@ export class Cube extends Transform {
     this.mesh = mesh;
     this.mesh.children.forEach((m) => (m.children[0].program = this.mat));
     this.mesh.setParent(this.ctrl);
-    const scale = 0.1;
+    const scale = this.a.scale;
     this.mesh.scale.set(scale, scale, scale);
 
     let d = 0.8;
@@ -58,6 +60,8 @@ export class Cube extends Transform {
   }
 
   render(t) {
+    this.a.lspeed = lerp(this.a.lspeed, window.sscroll.speed * 0.01, 0.05);
+
     this.spinner.render(t);
     this.rotation.x = -this.spinner.spin.y * 0.1;
     this.rotation.y = this.spinner.spin.x * 0.1;
@@ -65,7 +69,11 @@ export class Cube extends Transform {
     this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
     this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
     this.position.x = this.a.mx * 0.5;
-    this.position.y = this.a.my * 0.5;
+    this.position.y =
+      this.a.my * 0.5 + this.a.lspeed + window.sscroll.percent * 0.8;
+
+    this.a.scale = 0.08 + window.sscroll.percent * 0.03;
+    this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
 
     const z =
       Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
@@ -73,5 +81,19 @@ export class Cube extends Transform {
 
     this.mat.time = t;
   }
+
   resize() {}
+
+  /** Init Events */
+  initEvents() {
+    // + cta hover
+    [...document.querySelectorAll("[data-a='cta']")].forEach((el) =>
+      el.addEventListener("mouseenter", () => this.mouseCta(d))
+    );
+  }
+
+  /** Animations */
+  mouseCta() {
+    console.log("cta");
+  }
 }
