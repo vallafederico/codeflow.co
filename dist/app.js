@@ -10166,6 +10166,7 @@ ${addLineNumbers(fragment2)}`);
       });
       this.cube.setParent(this.g);
       this.g.setParent(this);
+      this.g.position.y -= 0.6;
     }
     render(t2) {
       if (!this.isOn)

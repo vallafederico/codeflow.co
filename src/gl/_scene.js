@@ -33,6 +33,7 @@ export default class extends Transform {
 
     this.cube.setParent(this.g);
     this.g.setParent(this);
+    this.g.position.y -= 0.6;
   }
 
   render(t) {
