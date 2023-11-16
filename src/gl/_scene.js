@@ -16,7 +16,7 @@ export default class extends Transform {
   async load() {
     this.loader = new Loader(this.gl);
     this.asset = await this.loader.load();
-    console.log(this.asset);
+    // console.log(this.asset);
 
     this.create();
   }
@@ -33,7 +33,8 @@ export default class extends Transform {
 
     this.cube.setParent(this.g);
     this.g.setParent(this);
-    this.g.position.y -= 0.6;
+
+    if (!window.isDebug) this.g.position.y -= 0.6;
   }
 
   render(t) {

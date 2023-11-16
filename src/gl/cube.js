@@ -11,6 +11,8 @@ export class Cube extends Transform {
     my: 0,
     scale: 0.1,
     lspeed: 0,
+    initial: 3,
+    c_hover: 0,
   };
 
   constructor(gl, { mesh, mtc1, mtc2 } = {}) {
@@ -36,6 +38,14 @@ export class Cube extends Transform {
     }, d * 1100);
 
     this.spinner = new Spinner();
+
+    Tween.to(this.a, {
+      initial: 0,
+      ease: "back.out",
+      duration: 1.2,
+    });
+
+    this.initEvents();
   }
 
   scramble(dur) {
@@ -60,25 +70,53 @@ export class Cube extends Transform {
   }
 
   render(t) {
-    this.a.lspeed = lerp(this.a.lspeed, window.sscroll.speed * 0.01, 0.05);
-
+    this.a.lspeed = lerp(this.a.lspeed, window.sscroll.speed * 0.015, 0.05);
     this.spinner.render(t);
-    this.rotation.x = -this.spinner.spin.y * 0.1;
-    this.rotation.y = this.spinner.spin.x * 0.1;
+
+    // ** rotation
+    const rt = t * 0.01;
+    let rx = this.spinner.spin.y * 0.1 + rt;
+    let ry = this.spinner.spin.x * 0.1 + rt;
+
+    // rx -= this.a.initial;
+    // ry += this.a.initial;
 
     this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
     this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
     this.position.x = this.a.mx * 0.5;
-    this.position.y =
-      this.a.my * 0.5 + this.a.lspeed + window.sscroll.percent * 0.8;
 
-    this.a.scale = 0.08 + window.sscroll.percent * 0.03;
-    this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
+    if (!window.isDebug) {
+      // actual page
 
-    const z =
-      Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
-    this.position.z = -z;
+      // position y
+      this.position.y =
+        this.a.my * 1 +
+        window.sscroll.percent * 0.8 + // move up on percent
+        this.a.lspeed + // move on speed
+        this.a.initial; // initial animation
 
+      this.a.scale =
+        0.1 + window.sscroll.percent * 0.05 + this.mat.a.hover * 0.02;
+
+      this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
+
+      // rotation
+      rx += window.sscroll.a.lp * 5;
+      ry += window.sscroll.a.lp * 5;
+
+      const z =
+        Math.abs(Math.sin(this.position.x)) -
+        Math.abs(Math.sin(this.position.y));
+      this.position.z = -z;
+    } else {
+      // is debug view
+    }
+
+    // ++ apply rotation
+    this.rotation.x = rx;
+    this.rotation.y = ry;
+
+    // shader
     this.mat.time = t;
   }
 
@@ -87,13 +125,21 @@ export class Cube extends Transform {
   /** Init Events */
   initEvents() {
     // + cta hover
-    [...document.querySelectorAll("[data-a='cta']")].forEach((el) =>
-      el.addEventListener("mouseenter", () => this.mouseCta(d))
-    );
+    [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
+      el.addEventListener("mouseenter", () => this.mouseCta(1));
+      el.addEventListener("mouseleave", () => this.mouseCta(0));
+    });
   }
 
   /** Animations */
-  mouseCta() {
-    console.log("cta");
+  mouseCta(val = 0) {
+    // console.log("cta", val);
+
+    if (this.mouseCtaAnimation) this.mouseCtaAnimation.kill();
+    this.mouseCtaAnimation = Tween.to(this.mat.a, {
+      hover: val,
+      ease: "expo.out",
+      duration: 1.2,
+    });
   }
 }

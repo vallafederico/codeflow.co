@@ -1,9 +1,11 @@
 import { Text } from "./animation/text";
 // import { Track } from "../util/track";
 // import { Alpha } from "./animation/alpha";
+import Tween from "gsap";
 
 export class Dom {
   constructor() {
+    this.hidden = document.querySelector("[data-start='hidden']");
     this.create();
   }
 
@@ -24,6 +26,12 @@ export class Dom {
   }
 
   start() {
+    Tween.to(this.hidden, {
+      autoAlpha: 1,
+      duration: 1,
+      delay: 0.2,
+    });
+
     this.texts?.forEach((text) => text.start());
     this.alpha?.start();
     this.track?.start();

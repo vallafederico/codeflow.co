@@ -1,5 +1,6 @@
 import Lenis from "@studio-freight/lenis";
 import { easeOutExpo } from "../util/easings.js";
+import { lerp } from "../util/math.js";
 
 // export function customExpo(x) {
 //   return Math.min(1, 1.001 - Math.pow(2, -10 * x));
@@ -8,6 +9,10 @@ import { easeOutExpo } from "../util/easings.js";
 const lenisBase = (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
 
 export class Scroll extends Lenis {
+  a = {
+    lp: 0,
+  };
+
   constructor() {
     super({
       duration: 1.2,
@@ -56,6 +61,8 @@ export class Scroll extends Lenis {
 
   render(t) {
     if (!this.isActive) return;
+
+    this.a.lp = lerp(this.a.lp, this.percent, 0.1);
 
     this.raf(t);
   }

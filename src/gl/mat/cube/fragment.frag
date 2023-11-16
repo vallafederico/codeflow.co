@@ -9,10 +9,12 @@ uniform float u_time;
 uniform sampler2D u_mtc1;
 uniform sampler2D u_mtc2;
 
-vec3 COL_RED = vec3(1., 0., 0.);
-vec3 COL_YEL = vec3(1., 1., 0.);
-vec3 COL_BLU = vec3(0., 0., 1.);
 vec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);
+// vec3 COL_RED = vec3(1., 0., 0.);
+// vec3 COL_YEL = vec3(1., 1., 0.);
+// vec3 COL_BLU = vec3(0., 0., 1.);
+
+uniform float u_a_hover;
 
 void main() {
 
@@ -28,11 +30,17 @@ void main() {
     float mixing_value = (1. - fakeUv.y);
     vec3 mtc = mix(mtc1, mtc2, split);
     mtc = mix(mtc, mtc2, split * mixing_value);
-
     mtc = mix(COL_BG * .9, vec3(1.), mtc);
 
+    vec3 col = mtc;
 
-    gl_FragColor.rgb = mtc;
-    // gl_FragColor.rgb = vec3(split);
+    float rev_split = 1. - split;
+    col = mix(mtc, mtc + .1, rev_split * u_a_hover); // * hover 
+
+    
+
+
+    gl_FragColor.rgb = col;
+    // gl_FragColor.rgb = vec3(col_map);
     gl_FragColor.a = 1.0;
 }

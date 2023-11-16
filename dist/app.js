@@ -720,7 +720,7 @@
       ratioY = from[1];
     }
     return function(i2, target, a) {
-      var l = (a || vars).length, distances = cache[l], originX, originY, x, y, d2, j, max, min, wrapAt;
+      var l = (a || vars).length, distances = cache[l], originX, originY, x, y, d, j, max, min, wrapAt;
       if (!distances) {
         wrapAt = vars.grid === "auto" ? 0 : (vars.grid || [1, _bigNum])[1];
         if (!wrapAt) {
@@ -737,9 +737,9 @@
         for (j = 0; j < l; j++) {
           x = j % wrapAt - originX;
           y = originY - (j / wrapAt | 0);
-          distances[j] = d2 = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
-          d2 > max && (max = d2);
-          d2 < min && (min = d2);
+          distances[j] = d = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
+          d > max && (max = d);
+          d < min && (min = d);
         }
         from === "random" && shuffle(distances);
         distances.max = max - min;
@@ -993,7 +993,7 @@
     return (h * 6 < 1 ? m1 + (m2 - m1) * h * 6 : h < 0.5 ? m2 : h * 3 < 2 ? m1 + (m2 - m1) * (2 / 3 - h) * 6 : m1) * _255 + 0.5 | 0;
   };
   var splitColor = function splitColor2(v, toHSL, forceAlpha) {
-    var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h, s2, l, max, min, d2, wasHSL;
+    var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r2, g, b, h, s2, l, max, min, d, wasHSL;
     if (!a) {
       if (v.substr(-1) === ",") {
         v = v.substr(0, v.length - 1);
@@ -1045,9 +1045,9 @@
       if (max === min) {
         h = s2 = 0;
       } else {
-        d2 = max - min;
-        s2 = l > 0.5 ? d2 / (2 - max - min) : d2 / (max + min);
-        h = max === r2 ? (g - b) / d2 + (g < b ? 6 : 0) : max === g ? (b - r2) / d2 + 2 : (r2 - g) / d2 + 4;
+        d = max - min;
+        s2 = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        h = max === r2 ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r2) / d + 2 : (r2 - g) / d + 4;
         h *= 60;
       }
       a[0] = ~~(h + 0.5);
@@ -1068,7 +1068,7 @@
     return values;
   };
   var _formatColors = function _formatColors2(s2, toHSL, orderMatchData) {
-    var result = "", colors = (s2 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i2 = 0, c, shell, d2, l;
+    var result = "", colors = (s2 + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i2 = 0, c, shell, d, l;
     if (!colors) {
       return s2;
     }
@@ -1076,13 +1076,13 @@
       return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
     });
     if (orderMatchData) {
-      d2 = _colorOrderData(s2);
+      d = _colorOrderData(s2);
       c = orderMatchData.c;
-      if (c.join(result) !== d2.c.join(result)) {
+      if (c.join(result) !== d.c.join(result)) {
         shell = s2.replace(_colorExp, "1").split(_numWithUnitExp);
         l = shell.length - 1;
         for (; i2 < l; i2++) {
-          result += shell[i2] + (~c.indexOf(i2) ? colors.shift() || type + "0,0,0,0)" : (d2.length ? d2 : colors.length ? colors : orderMatchData).shift());
+          result += shell[i2] + (~c.indexOf(i2) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
         }
       }
     }
@@ -1177,8 +1177,8 @@
         _nextTime = _self.time * 1e3 + _gap;
       },
       add: function add4(callback, once, prioritize) {
-        var func = once ? function(t2, d2, f, v) {
-          callback(t2, d2, f, v);
+        var func = once ? function(t2, d, f, v) {
+          callback(t2, d, f, v);
           _self.remove(func);
         } : callback;
         _self.remove(callback);
@@ -3841,13 +3841,13 @@
     return force2D && matrix.length > 6 ? [matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]] : matrix;
   };
   var _applySVGOrigin = function _applySVGOrigin2(target, origin, originIsAbsolute, smooth, matrixArray, pluginToAddPropTweensTo) {
-    var cache = target._gsap, matrix = matrixArray || _getMatrix(target, true), xOriginOld = cache.xOrigin || 0, yOriginOld = cache.yOrigin || 0, xOffsetOld = cache.xOffset || 0, yOffsetOld = cache.yOffset || 0, a = matrix[0], b = matrix[1], c = matrix[2], d2 = matrix[3], tx = matrix[4], ty = matrix[5], originSplit = origin.split(" "), xOrigin = parseFloat(originSplit[0]) || 0, yOrigin = parseFloat(originSplit[1]) || 0, bounds, determinant2, x, y;
+    var cache = target._gsap, matrix = matrixArray || _getMatrix(target, true), xOriginOld = cache.xOrigin || 0, yOriginOld = cache.yOrigin || 0, xOffsetOld = cache.xOffset || 0, yOffsetOld = cache.yOffset || 0, a = matrix[0], b = matrix[1], c = matrix[2], d = matrix[3], tx = matrix[4], ty = matrix[5], originSplit = origin.split(" "), xOrigin = parseFloat(originSplit[0]) || 0, yOrigin = parseFloat(originSplit[1]) || 0, bounds, determinant2, x, y;
     if (!originIsAbsolute) {
       bounds = _getBBox(target);
       xOrigin = bounds.x + (~originSplit[0].indexOf("%") ? xOrigin / 100 * bounds.width : xOrigin);
       yOrigin = bounds.y + (~(originSplit[1] || originSplit[0]).indexOf("%") ? yOrigin / 100 * bounds.height : yOrigin);
-    } else if (matrix !== _identity2DMatrix && (determinant2 = a * d2 - b * c)) {
-      x = xOrigin * (d2 / determinant2) + yOrigin * (-c / determinant2) + (c * ty - d2 * tx) / determinant2;
+    } else if (matrix !== _identity2DMatrix && (determinant2 = a * d - b * c)) {
+      x = xOrigin * (d / determinant2) + yOrigin * (-c / determinant2) + (c * ty - d * tx) / determinant2;
       y = xOrigin * (-b / determinant2) + yOrigin * (a / determinant2) - (a * ty - b * tx) / determinant2;
       xOrigin = x;
       yOrigin = y;
@@ -3856,7 +3856,7 @@
       tx = xOrigin - xOriginOld;
       ty = yOrigin - yOriginOld;
       cache.xOffset = xOffsetOld + (tx * a + ty * c) - tx;
-      cache.yOffset = yOffsetOld + (tx * b + ty * d2) - ty;
+      cache.yOffset = yOffsetOld + (tx * b + ty * d) - ty;
     } else {
       cache.xOffset = cache.yOffset = 0;
     }
@@ -3879,7 +3879,7 @@
     if ("x" in cache && !uncache && !cache.uncache) {
       return cache;
     }
-    var style = target.style, invertedScaleX = cache.scaleX < 0, px = "px", deg = "deg", cs = getComputedStyle(target), origin = _getComputedProperty(target, _transformOriginProp) || "0", x, y, z, scaleX, scaleY, rotation, rotationX, rotationY, skewX, skewY, perspective2, xOrigin, yOrigin, matrix, angle2, cos, sin, a, b, c, d2, a12, a22, t1, t2, t3, a13, a23, a33, a42, a43, a32;
+    var style = target.style, invertedScaleX = cache.scaleX < 0, px = "px", deg = "deg", cs = getComputedStyle(target), origin = _getComputedProperty(target, _transformOriginProp) || "0", x, y, z, scaleX, scaleY, rotation, rotationX, rotationY, skewX, skewY, perspective2, xOrigin, yOrigin, matrix, angle2, cos, sin, a, b, c, d, a12, a22, t1, t2, t3, a13, a23, a33, a42, a43, a32;
     x = y = z = rotation = rotationX = rotationY = skewX = skewY = perspective2 = 0;
     scaleX = scaleY = 1;
     cache.svg = !!(target.getCTM && _isSVG(target));
@@ -3906,18 +3906,18 @@
       a = matrix[0];
       b = matrix[1];
       c = matrix[2];
-      d2 = matrix[3];
+      d = matrix[3];
       x = a12 = matrix[4];
       y = a22 = matrix[5];
       if (matrix.length === 6) {
         scaleX = Math.sqrt(a * a + b * b);
-        scaleY = Math.sqrt(d2 * d2 + c * c);
+        scaleY = Math.sqrt(d * d + c * c);
         rotation = a || b ? _atan2(b, a) * _RAD2DEG : 0;
-        skewX = c || d2 ? _atan2(c, d2) * _RAD2DEG + rotation : 0;
+        skewX = c || d ? _atan2(c, d) * _RAD2DEG + rotation : 0;
         skewX && (scaleY *= Math.abs(Math.cos(skewX * _DEG2RAD)));
         if (cache.svg) {
           x -= xOrigin - (xOrigin * a + yOrigin * c);
-          y -= yOrigin - (xOrigin * b + yOrigin * d2);
+          y -= yOrigin - (xOrigin * b + yOrigin * d);
         }
       } else {
         a32 = matrix[6];
@@ -3953,7 +3953,7 @@
           t1 = a * cos - a13 * sin;
           t2 = b * cos - a23 * sin;
           t3 = c * cos - a33 * sin;
-          a43 = d2 * sin + a43 * cos;
+          a43 = d * sin + a43 * cos;
           a = t1;
           b = t2;
           c = t3;
@@ -4943,6 +4943,7 @@
   // src/modules/dom.js
   var Dom = class {
     constructor() {
+      this.hidden = document.querySelector("[data-start='hidden']");
       this.create();
     }
     resize() {
@@ -4958,6 +4959,11 @@
       this.start();
     }
     start() {
+      gsapWithCSS.to(this.hidden, {
+        autoAlpha: 1,
+        duration: 1,
+        delay: 0.2
+      });
       this.texts?.forEach((text) => text.start());
       this.alpha?.start();
       this.track?.start();
@@ -5111,7 +5117,7 @@
     }
   };
   var r = class {
-    constructor({ wrapper: i2 = window, content: r2 = document.documentElement, wheelEventsTarget: l = i2, eventsTarget: h = l, smoothWheel: a = true, smoothTouch: c = false, syncTouch: u = false, syncTouchLerp: p = 0.1, __iosNoInertiaSyncTouchLerp: d2 = 0.4, touchInertiaMultiplier: m = 35, duration: v, easing: g = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: S = !v && 0.1, infinite: w = false, orientation: f = "vertical", gestureOrientation: y = "vertical", touchMultiplier: T = 1, wheelMultiplier: z = 1, normalizeWheel: M = false, autoResize: b = true } = {}) {
+    constructor({ wrapper: i2 = window, content: r2 = document.documentElement, wheelEventsTarget: l = i2, eventsTarget: h = l, smoothWheel: a = true, smoothTouch: c = false, syncTouch: u = false, syncTouchLerp: p = 0.1, __iosNoInertiaSyncTouchLerp: d = 0.4, touchInertiaMultiplier: m = 35, duration: v, easing: g = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2)), lerp: S = !v && 0.1, infinite: w = false, orientation: f = "vertical", gestureOrientation: y = "vertical", touchMultiplier: T = 1, wheelMultiplier: z = 1, normalizeWheel: M = false, autoResize: b = true } = {}) {
       this.onVirtualScroll = ({ deltaX: i3, deltaY: e2, event: s2 }) => {
         if (s2.ctrlKey)
           return;
@@ -5138,7 +5144,7 @@
           const t2 = this.animatedScroll;
           this.animatedScroll = this.targetScroll = this.actualScroll, this.velocity = 0, this.direction = Math.sign(this.animatedScroll - t2), this.emit();
         }
-      }, window.lenisVersion = "1.0.26", i2 !== document.documentElement && i2 !== document.body || (i2 = window), this.options = { wrapper: i2, content: r2, wheelEventsTarget: l, eventsTarget: h, smoothWheel: a, smoothTouch: c, syncTouch: u, syncTouchLerp: p, __iosNoInertiaSyncTouchLerp: d2, touchInertiaMultiplier: m, duration: v, easing: g, lerp: S, infinite: w, gestureOrientation: y, orientation: f, touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M, autoResize: b }, this.animate = new e(), this.emitter = new o(), this.dimensions = new s({ wrapper: i2, content: r2, autoResize: b }), this.toggleClass("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = u || a || c, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll = new n(h, { touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M }), this.virtualScroll.on("scroll", this.onVirtualScroll);
+      }, window.lenisVersion = "1.0.26", i2 !== document.documentElement && i2 !== document.body || (i2 = window), this.options = { wrapper: i2, content: r2, wheelEventsTarget: l, eventsTarget: h, smoothWheel: a, smoothTouch: c, syncTouch: u, syncTouchLerp: p, __iosNoInertiaSyncTouchLerp: d, touchInertiaMultiplier: m, duration: v, easing: g, lerp: S, infinite: w, gestureOrientation: y, orientation: f, touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M, autoResize: b }, this.animate = new e(), this.emitter = new o(), this.dimensions = new s({ wrapper: i2, content: r2, autoResize: b }), this.toggleClass("lenis", true), this.velocity = 0, this.isLocked = false, this.isStopped = false, this.isSmooth = u || a || c, this.isScrolling = false, this.targetScroll = this.animatedScroll = this.actualScroll, this.options.wrapper.addEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll = new n(h, { touchMultiplier: T, wheelMultiplier: z, normalizeWheel: M }), this.virtualScroll.on("scroll", this.onVirtualScroll);
     }
     destroy() {
       this.emitter.destroy(), this.options.wrapper.removeEventListener("scroll", this.onScroll, { passive: false }), this.virtualScroll.destroy(), this.dimensions.destroy(), this.toggleClass("lenis", false), this.toggleClass("lenis-smooth", false), this.toggleClass("lenis-scrolling", false), this.toggleClass("lenis-stopped", false);
@@ -5258,9 +5264,17 @@
     return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
   }
 
+  // src/util/math.js
+  function lerp(v0, v1, t2) {
+    return v0 * (1 - t2) + v1 * t2;
+  }
+
   // src/modules/scroll.js
   var lenisBase = (t2) => Math.min(1, 1.001 - Math.pow(2, -10 * t2));
   var Scroll = class extends r {
+    a = {
+      lp: 0
+    };
     constructor() {
       super({
         duration: 1.2,
@@ -5301,6 +5315,7 @@
     render(t2) {
       if (!this.isActive)
         return;
+      this.a.lp = lerp(this.a.lp, this.percent, 0.1);
       this.raf(t2);
     }
     set active(value) {
@@ -5907,7 +5922,7 @@
     out[2] = ax * by - ay * bx;
     return out;
   }
-  function lerp(out, a, b, t2) {
+  function lerp2(out, a, b, t2) {
     let ax = a[0];
     let ay = a[1];
     let az = a[2];
@@ -6114,7 +6129,7 @@
       return angle(this, v);
     }
     lerp(v, t2) {
-      lerp(this, this, v, t2);
+      lerp2(this, this, v, t2);
       return this;
     }
     clone() {
@@ -9956,13 +9971,15 @@ ${addLineNumbers(fragment2)}`);
   };
 
   // src/assets/index.js
+  var isLocal = false;
+  var mtc = isLocal ? "http://localhost:8000/asset/mtc16.png" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637d3fc6e06242f0d7c95_mtc16.webp";
+  var mtc2 = isLocal ? "http://localhost:8000/asset/mtc3.png" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637d30b73cf212f61b644_mtc3.webp";
+  var cube = isLocal ? "http://localhost:8000/asset/cube8.glb" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637ab023b9146c71771e3_cube8.glb.txt";
   var ASSETS = {
     // tile: "http://localhost:8000/asset/tile2.glb",
-    mtc: "http://localhost:8000/asset/mtc16.png",
-    // 16
-    mtc2: "http://localhost:8000/asset/mtc3.png",
-    // 15
-    cube: "http://localhost:8000/asset/cube8.glb"
+    mtc,
+    mtc2,
+    cube
   };
 
   // src/gl/util/texture-loader.js
@@ -9989,16 +10006,16 @@ ${addLineNumbers(fragment2)}`);
       this.gl = gl;
     }
     async load() {
-      let [mtc, mtc2, cube] = await Promise.all([
+      let [mtc3, mtc22, cube2] = await Promise.all([
         loadTexture(this.gl, ASSETS.mtc),
         loadTexture(this.gl, ASSETS.mtc2),
         loadModel(this.gl, ASSETS.cube)
       ]);
-      cube = cube.scene[0];
+      cube2 = cube2.scene[0];
       return {
-        mtc,
-        mtc2,
-        cube
+        mtc: mtc3,
+        mtc2: mtc22,
+        cube: cube2
       };
     }
   };
@@ -10007,10 +10024,13 @@ ${addLineNumbers(fragment2)}`);
   var vertex_default = "#define MPI 3.1415926538\n#define MTAU 6.28318530718\n\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\n\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat3 normalMatrix;\n\nuniform float u_time;\n\nvarying vec3 v_normal;\nvarying vec3 v_view;\nvarying vec2 v_uv;\n\n\nvoid main() {\n  vec3 pos = position;\n\n  vec4 transformed = modelViewMatrix * vec4(pos, 1.0);\n  v_view = normalize(- transformed.xyz);\n  gl_Position = projectionMatrix * transformed;\n\n  v_normal = normalize(normalMatrix * normal);\n  v_uv = uv;\n}\n";
 
   // src/gl/mat/cube/fragment.frag
-  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\n\nvec3 COL_RED = vec3(1., 0., 0.);\nvec3 COL_YEL = vec3(1., 1., 0.);\nvec3 COL_BLU = vec3(0., 0., 1.);\nvec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);\n\nvoid main() {\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n\n    mtc = mix(COL_BG * .9, vec3(1.), mtc);\n\n\n    gl_FragColor.rgb = mtc;\n    // gl_FragColor.rgb = vec3(split);\n    gl_FragColor.a = 1.0;\n}\n";
+  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\n\nvec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);\n// vec3 COL_RED = vec3(1., 0., 0.);\n// vec3 COL_YEL = vec3(1., 1., 0.);\n// vec3 COL_BLU = vec3(0., 0., 1.);\n\nuniform float u_a_hover;\n\nvoid main() {\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n    mtc = mix(COL_BG * .9, vec3(1.), mtc);\n\n    vec3 col = mtc;\n\n    float rev_split = 1. - split;\n    col = mix(mtc, mtc + .1, rev_split * u_a_hover); // * hover \n\n    \n\n\n    gl_FragColor.rgb = col;\n    // gl_FragColor.rgb = vec3(col_map);\n    gl_FragColor.a = 1.0;\n}\n";
 
   // src/gl/mat/cube/index.js
   var cube_default = class extends Program {
+    a = {
+      hover: 0
+    };
     constructor(gl, options = {}) {
       super(gl, {
         vertex: vertex_default,
@@ -10021,11 +10041,16 @@ ${addLineNumbers(fragment2)}`);
       this.uniforms = {
         u_time: { value: 0 },
         u_mtc1: { value: options.mtc1 },
-        u_mtc2: { value: options.mtc2 }
+        u_mtc2: { value: options.mtc2 },
+        u_col_map: { value: options.col_map },
+        u_a_hover: { value: 0 }
       };
     }
     set time(t2) {
       this.uniforms.u_time.value = t2;
+      this.uniforms.u_a_hover.value = this.a.hover;
+    }
+    set hover(v) {
     }
   };
 
@@ -10079,11 +10104,6 @@ ${addLineNumbers(fragment2)}`);
     }
   };
 
-  // src/util/math.js
-  function lerp3(v0, v1, t2) {
-    return v0 * (1 - t2) + v1 * t2;
-  }
-
   // src/gl/cube.js
   var Cube = class extends Transform {
     start = 0;
@@ -10091,27 +10111,35 @@ ${addLineNumbers(fragment2)}`);
       mx: 0,
       my: 0,
       scale: 0.1,
-      lspeed: 0
+      lspeed: 0,
+      initial: 3,
+      c_hover: 0
     };
-    constructor(gl, { mesh, mtc1, mtc2 } = {}) {
+    constructor(gl, { mesh, mtc1, mtc2: mtc22 } = {}) {
       super();
       this.gl = gl;
       this.ctrl = new Transform();
       this.ctrl.setParent(this);
       this.mat = new cube_default(this.gl, {
         mtc1,
-        mtc2
+        mtc2: mtc22
       });
       this.mesh = mesh;
       this.mesh.children.forEach((m) => m.children[0].program = this.mat);
       this.mesh.setParent(this.ctrl);
       const scale5 = this.a.scale;
       this.mesh.scale.set(scale5, scale5, scale5);
-      let d2 = 0.8;
+      let d = 0.8;
       setInterval(() => {
-        this.scramble(d2);
-      }, d2 * 1100);
+        this.scramble(d);
+      }, d * 1100);
       this.spinner = new Spinner();
+      gsapWithCSS.to(this.a, {
+        initial: 0,
+        ease: "back.out",
+        duration: 1.2
+      });
+      this.initEvents();
     }
     scramble(dur) {
       this.start++;
@@ -10131,31 +10159,48 @@ ${addLineNumbers(fragment2)}`);
       });
     }
     render(t2) {
-      this.a.lspeed = lerp3(this.a.lspeed, window.sscroll.speed * 0.01, 0.05);
+      this.a.lspeed = lerp(this.a.lspeed, window.sscroll.speed * 0.015, 0.05);
       this.spinner.render(t2);
-      this.rotation.x = -this.spinner.spin.y * 0.1;
-      this.rotation.y = this.spinner.spin.x * 0.1;
-      this.a.mx = lerp3(this.a.mx, this.spinner.velocity.x, 0.1);
-      this.a.my = lerp3(this.a.my, -this.spinner.velocity.y, 0.1);
+      const rt = t2 * 0.01;
+      let rx = this.spinner.spin.y * 0.1 + rt;
+      let ry = this.spinner.spin.x * 0.1 + rt;
+      this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
+      this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
       this.position.x = this.a.mx * 0.5;
-      this.position.y = this.a.my * 0.5 + this.a.lspeed + window.sscroll.percent * 0.8;
-      this.a.scale = 0.08 + window.sscroll.percent * 0.03;
-      this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
-      const z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
-      this.position.z = -z;
+      if (!window.isDebug) {
+        this.position.y = this.a.my * 1 + window.sscroll.percent * 0.8 + // move up on percent
+        this.a.lspeed + // move on speed
+        this.a.initial;
+        this.a.scale = 0.1 + window.sscroll.percent * 0.05 + this.mat.a.hover * 0.02;
+        this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
+        rx += window.sscroll.a.lp * 5;
+        ry += window.sscroll.a.lp * 5;
+        const z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
+        this.position.z = -z;
+      } else {
+      }
+      this.rotation.x = rx;
+      this.rotation.y = ry;
       this.mat.time = t2;
     }
     resize() {
     }
     /** Init Events */
     initEvents() {
-      [...document.querySelectorAll("[data-a='cta']")].forEach(
-        (el) => el.addEventListener("mouseenter", () => this.mouseCta(d))
-      );
+      [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
+        el.addEventListener("mouseenter", () => this.mouseCta(1));
+        el.addEventListener("mouseleave", () => this.mouseCta(0));
+      });
     }
     /** Animations */
-    mouseCta() {
-      console.log("cta");
+    mouseCta(val = 0) {
+      if (this.mouseCtaAnimation)
+        this.mouseCtaAnimation.kill();
+      this.mouseCtaAnimation = gsapWithCSS.to(this.mat.a, {
+        hover: val,
+        ease: "expo.out",
+        duration: 1.2
+      });
     }
   };
 
@@ -10170,7 +10215,6 @@ ${addLineNumbers(fragment2)}`);
     async load() {
       this.loader = new Loader(this.gl);
       this.asset = await this.loader.load();
-      console.log(this.asset);
       this.create();
     }
     create() {
@@ -10182,7 +10226,8 @@ ${addLineNumbers(fragment2)}`);
       });
       this.cube.setParent(this.g);
       this.g.setParent(this);
-      this.g.position.y -= 0.6;
+      if (!window.isDebug)
+        this.g.position.y -= 0.6;
     }
     render(t2) {
       if (!this.isOn)
@@ -10226,9 +10271,9 @@ ${addLineNumbers(fragment2)}`);
     }
     render(scroll = 0) {
       this.time += 0.5;
-      this.m.ex = lerp3(this.m.ex, this.m.x, 0.05);
-      this.m.ey = lerp3(this.m.ey, this.m.y, 0.05);
-      this.m.mex = lerp3(this.m.mex, this.m.mx, 0.03);
+      this.m.ex = lerp(this.m.ex, this.m.x, 0.05);
+      this.m.ey = lerp(this.m.ey, this.m.y, 0.05);
+      this.m.mex = lerp(this.m.mex, this.m.mx, 0.03);
       this.controls?.update();
       this.scene?.render(this.time);
       window.requestAnimationFrame(this.render.bind(this));
@@ -10292,6 +10337,7 @@ ${addLineNumbers(fragment2)}`);
     }
     /* Events */
   };
+  window.isDebug = window.location.pathname === "/webgl";
   window.app = new App();
 })();
 /*! Bundled license information:

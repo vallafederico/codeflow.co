@@ -47,4 +47,5 @@ class App {
   /* Events */
 }
 
+window.isDebug = window.location.pathname === "/webgl";
 window.app = new App();

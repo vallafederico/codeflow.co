@@ -2,7 +2,6 @@ import { ASSETS } from "../../assets/";
 import { loadTexture } from "./texture-loader";
 import { loadModel } from "./model-loader";
 
-// console.log(ASSETS);
 export class Loader {
   constructor(gl) {
     this.gl = gl;
