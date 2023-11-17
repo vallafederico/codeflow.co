@@ -32,7 +32,7 @@ export class Text extends Observe {
         y: "0%",
       },
       out: {
-        y: "150%",
+        y: element.dataset.y || "150%",
       },
       ...params,
     };
@@ -99,7 +99,7 @@ export class Text extends Observe {
 function returnSplit(element) {
   switch (element.dataset.a) {
     case "char":
-      return splitWord(element);
+      return splitChar(element);
       break;
     case "word":
       return splitWord(element);

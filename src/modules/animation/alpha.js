@@ -1,4 +1,4 @@
-import gsap from "gsap";
+import Tween from "gsap";
 import { Observe } from "../../util/observe";
 
 // NEEDS CHECKING!
@@ -52,7 +52,7 @@ export class Alpha extends Observe {
 
   animateIn() {
     if (this.animation) this.animation.kill();
-    this.animation = gsap.to(this.animated, {
+    this.animation = Tween.to(this.animated, {
       ...this.params.in,
       ...this.anim,
     });
@@ -61,7 +61,7 @@ export class Alpha extends Observe {
   animateOut() {
     this.stop();
     if (this.animation) this.animation.kill();
-    this.animation = gsap.to(this.animated, {
+    this.animation = Tween.to(this.animated, {
       ...this.params.out,
       ...this.anim,
     });
@@ -69,11 +69,11 @@ export class Alpha extends Observe {
 
   setIn() {
     if (this.animation) this.animation.kill();
-    gsap.set(this.animated, { ...this.params.in });
+    Tween.set(this.animated, { ...this.params.in });
   }
 
   setOut() {
     if (this.animation) this.animation.kill();
-    gsap.set(this.animated, { ...this.params.out });
+    Tween.set(this.animated, { ...this.params.out });
   }
 }

@@ -3,6 +3,7 @@ import Tween from "gsap";
 import Material from "./mat/cube/index.js";
 import { Spinner } from "./util/spinner.js";
 import { lerp } from "../util/math.js";
+import { bounceEase } from "../util/ease.js";
 
 export class Cube extends Transform {
   start = 0;
@@ -13,6 +14,7 @@ export class Cube extends Transform {
     lspeed: 0,
     initial: 3,
     c_hover: 0,
+    click: 0,
   };
 
   constructor(gl, { mesh, mtc1, mtc2 } = {}) {
@@ -85,13 +87,14 @@ export class Cube extends Transform {
     this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
     this.position.x = this.a.mx * 0.5;
 
+    let z = 0;
     if (!window.isDebug) {
       // actual page
 
       // position y
       this.position.y =
         this.a.my * 1 +
-        window.sscroll.percent * 0.8 + // move up on percent
+        window.sscroll.percent * 0.4 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial; // initial animation
 
@@ -104,17 +107,15 @@ export class Cube extends Transform {
       rx += window.sscroll.a.lp * 5;
       ry += window.sscroll.a.lp * 5;
 
-      const z =
+      z =
         Math.abs(Math.sin(this.position.x)) -
         Math.abs(Math.sin(this.position.y));
-      this.position.z = -z;
-    } else {
-      // is debug view
     }
 
     // ++ apply rotation
-    this.rotation.x = rx;
-    this.rotation.y = ry;
+    this.position.z = -z - this.a.click;
+    this.rotation.x = rx + this.a.click * 0.2;
+    this.rotation.y = ry + this.a.click * 0.2;
 
     // shader
     this.mat.time = t;
@@ -128,6 +129,28 @@ export class Cube extends Transform {
     [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
       el.addEventListener("mouseenter", () => this.mouseCta(1));
       el.addEventListener("mouseleave", () => this.mouseCta(0));
+    });
+
+    //  + click
+    let locked = false;
+    document.addEventListener("click", () => {
+      if (locked) return;
+      locked = true;
+
+      Tween.to(this.a, {
+        click: 5,
+        duration: 1.6,
+        ease: bounceEase,
+        onComplete: () => (locked = false),
+      });
+
+      // Tween.to(this.a, {
+      //   click: 0,
+      //   delay: 0.3,
+      //   duration: 0.8,
+      //   ease: "back.out",
+      //   onComplete: () => (locked = false),
+      // });
     });
   }
 

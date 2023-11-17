@@ -1675,7 +1675,7 @@
       _inheritDefaults(toVars).immediateRender = _isNotFalse(toVars.immediateRender);
       return this.staggerTo(targets, duration, toVars, stagger, position, onCompleteAll, onCompleteAllParams);
     };
-    _proto2.render = function render3(totalTime, suppressEvents, force) {
+    _proto2.render = function render4(totalTime, suppressEvents, force) {
       var prevTime = this._time, tDur = this._dirty ? this.totalDuration() : this._tDur, dur = this._dur, tTime = totalTime <= 0 ? 0 : _roundPrecise(totalTime), crossingStart = this._zTime < 0 !== totalTime < 0 && (this._initted || !dur), time, child, next, iteration, cycleDuration, prevPaused, pauseTween, timeScale, prevStart, prevIteration, yoyo, isYoyo;
       this !== _globalTimeline && tTime > tDur && totalTime >= 0 && (tTime = tDur);
       if (tTime !== this._tTime || force || crossingStart) {
@@ -2496,7 +2496,7 @@
       return _this3;
     }
     var _proto3 = Tween2.prototype;
-    _proto3.render = function render3(totalTime, suppressEvents, force) {
+    _proto3.render = function render4(totalTime, suppressEvents, force) {
       var prevTime = this._time, tDur = this._tDur, dur = this._dur, isNegative = totalTime < 0, tTime = totalTime > tDur - _tinyNum && !isNegative ? tDur : totalTime < _tinyNum ? 0 : totalTime, time, pt, iteration, cycleDuration, prevIteration, isYoyo, ratio, timeline2, yoyoEase;
       if (!dur) {
         _renderZeroDurationTween(this, totalTime, suppressEvents, force);
@@ -3230,7 +3230,7 @@
       name,
       rawVars: 1,
       //don't pre-process function-based values or "random()" strings.
-      init: function init4(target, vars, tween) {
+      init: function init5(target, vars, tween) {
         tween._onInit = function(tween2) {
           var temp, p;
           if (_isString(vars)) {
@@ -4394,6 +4394,7 @@
   var TweenMaxWithCSS = gsapWithCSS.core.Tween;
 
   // node_modules/.pnpm/@gsap+shockingly@3.12.2/node_modules/@gsap/shockingly/utils/strings.js
+  var _trimExp = /(?:^\s+|\s+$)/g;
   var emojiExp = /([\uD800-\uDBFF][\uDC00-\uDFFF](?:[\u200D\uFE0F][\uD800-\uDBFF][\uDC00-\uDFFF]){2,}|\uD83D\uDC69(?:\u200D(?:(?:\uD83D\uDC69\u200D)?\uD83D\uDC67|(?:\uD83D\uDC69\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C\uDFF3\uFE0F\u200D\uD83C\uDF08|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642]\uFE0F|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC6F\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3C-\uDD3E\uDDD6-\uDDDF])\u200D[\u2640\u2642]\uFE0F|\uD83C\uDDFD\uD83C\uDDF0|\uD83C\uDDF6\uD83C\uDDE6|\uD83C\uDDF4\uD83C\uDDF2|\uD83C\uDDE9(?:\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF])|\uD83C\uDDF7(?:\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC])|\uD83C\uDDE8(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uFE0F\u200D[\u2640\u2642]|(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642])\uFE0F|(?:\uD83D\uDC41\uFE0F\u200D\uD83D\uDDE8|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\uD83D\uDC69\u200D[\u2695\u2696\u2708]|\uD83D\uDC68(?:(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708]))\uFE0F|\uD83C\uDDF2(?:\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF])|\uD83D\uDC69\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69]))|\uD83C\uDDF1(?:\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE])|\uD83C\uDDEF(?:\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5])|\uD83C\uDDED(?:\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA])|\uD83C\uDDEB(?:\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7])|[#\*0-9]\uFE0F\u20E3|\uD83C\uDDE7(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF])|\uD83C\uDDE6(?:\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF])|\uD83C\uDDFF(?:\uD83C[\uDDE6\uDDF2\uDDFC])|\uD83C\uDDF5(?:\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE])|\uD83C\uDDFB(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA])|\uD83C\uDDF3(?:\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF])|\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62(?:\uDB40\uDC77\uDB40\uDC6C\uDB40\uDC73|\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74|\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67)\uDB40\uDC7F|\uD83D\uDC68(?:\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83D\uDC68|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]))|\uD83C\uDDF8(?:\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF])|\uD83C\uDDF0(?:\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF])|\uD83C\uDDFE(?:\uD83C[\uDDEA\uDDF9])|\uD83C\uDDEE(?:\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9])|\uD83C\uDDF9(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF])|\uD83C\uDDEC(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE])|\uD83C\uDDFA(?:\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF])|\uD83C\uDDEA(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA])|\uD83C\uDDFC(?:\uD83C[\uDDEB\uDDF8])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uD83C[\uDFFB-\uDFFF])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u270A-\u270D]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC70\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDCAA\uDD74\uDD7A\uDD90\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD36\uDDD1-\uDDD5])(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC68(?:\u200D(?:(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC69\uDC6E\uDC70-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD26\uDD30-\uDD39\uDD3D\uDD3E\uDDD1-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])?|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDEEB\uDEEC\uDEF4-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])\uFE0F)/;
   function getText(e2) {
     var type = e2.nodeType, result = "";
@@ -4407,6 +4408,25 @@
       }
     } else if (type === 3 || type === 4) {
       return e2.nodeValue;
+    }
+    return result;
+  }
+  function emojiSafeSplit(text, delimiter, trim, preserveSpaces) {
+    text += "";
+    trim && (text = text.trim ? text.trim() : text.replace(_trimExp, ""));
+    if (delimiter && delimiter !== "") {
+      return text.replace(/>/g, "&gt;").replace(/</g, "&lt;").split(delimiter);
+    }
+    var result = [], l = text.length, i2 = 0, j, character;
+    for (; i2 < l; i2++) {
+      character = text.charAt(i2);
+      if (character.charCodeAt(0) >= 55296 && character.charCodeAt(0) <= 56319 || text.charCodeAt(i2 + 1) >= 65024 && text.charCodeAt(i2 + 1) <= 65039) {
+        j = ((text.substr(i2, 12).split(emojiExp) || [])[1] || "").length || 2;
+        character = text.substr(i2, j);
+        result.emoji = 1;
+        i2 += j - 1;
+      }
+      result.push(character === ">" ? "&gt;" : character === "<" ? "&lt;" : preserveSpaces && character === " " && (text.charAt(i2 - 1) === " " || text.charAt(i2 + 1) === " ") ? "&nbsp;" : character);
     }
     return result;
   }
@@ -4844,7 +4864,7 @@
           y: "0%"
         },
         out: {
-          y: "150%"
+          y: element.dataset.y || "150%"
         },
         ...params
       };
@@ -4905,7 +4925,7 @@
   function returnSplit(element) {
     switch (element.dataset.a) {
       case "char":
-        return splitWord(element);
+        return splitChar(element);
         break;
       case "word":
         return splitWord(element);
@@ -4940,6 +4960,284 @@
     wrapper.appendChild(el);
   }
 
+  // src/modules/animation/alpha.js
+  var Alpha = class extends Observe {
+    constructor({ element, anim, params, once = false }) {
+      super({
+        element,
+        config: {
+          root: null,
+          margin: "0px",
+          threshold: 0.5
+        }
+      });
+      this.anim = {
+        duration: 1.2,
+        ease: "expo.out",
+        delay: 0.1,
+        stagger: {
+          each: 0.05,
+          from: "start"
+        },
+        ...anim
+      };
+      this.params = {
+        in: {
+          autoAlpha: 1
+        },
+        out: {
+          autoAlpha: 0
+        },
+        ...params
+      };
+      this.once = once;
+      this.element = element;
+      this.animated = this.element;
+    }
+    isIn() {
+      this.animateIn();
+      if (this.once)
+        this.stop();
+    }
+    isOut() {
+      this.setOut();
+    }
+    animateIn() {
+      if (this.animation)
+        this.animation.kill();
+      this.animation = gsapWithCSS.to(this.animated, {
+        ...this.params.in,
+        ...this.anim
+      });
+    }
+    animateOut() {
+      this.stop();
+      if (this.animation)
+        this.animation.kill();
+      this.animation = gsapWithCSS.to(this.animated, {
+        ...this.params.out,
+        ...this.anim
+      });
+    }
+    setIn() {
+      if (this.animation)
+        this.animation.kill();
+      gsapWithCSS.set(this.animated, { ...this.params.in });
+    }
+    setOut() {
+      if (this.animation)
+        this.animation.kill();
+      gsapWithCSS.set(this.animated, { ...this.params.out });
+    }
+  };
+
+  // node_modules/.pnpm/@gsap+shockingly@3.12.2/node_modules/@gsap/shockingly/ScrambleTextPlugin.js
+  var CharSet = /* @__PURE__ */ function() {
+    function CharSet2(chars) {
+      this.chars = emojiSafeSplit(chars);
+      this.sets = [];
+      this.length = 50;
+      for (var i2 = 0; i2 < 20; i2++) {
+        this.sets[i2] = _scrambleText(80, this.chars);
+      }
+    }
+    var _proto = CharSet2.prototype;
+    _proto.grow = function grow(newLength) {
+      for (var i2 = 0; i2 < 20; i2++) {
+        this.sets[i2] += _scrambleText(newLength - this.length, this.chars);
+      }
+      this.length = newLength;
+    };
+    return CharSet2;
+  }();
+  var gsap3;
+  var _coreInitted3;
+  var _getGSAP = function _getGSAP2() {
+    return gsap3 || typeof window !== "undefined" && (gsap3 = window.gsap) && gsap3.registerPlugin && gsap3;
+  };
+  var _bonusValidated2 = 1;
+  var _spacesExp = /\s+/g;
+  var _scrambleText = function _scrambleText2(length3, chars) {
+    var l = chars.length, s2 = "";
+    while (--length3 > -1) {
+      s2 += chars[~~(Math.random() * l)];
+    }
+    return s2;
+  };
+  var _upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var _lower = _upper.toLowerCase();
+  var _charsLookup = {
+    upperCase: new CharSet(_upper),
+    lowerCase: new CharSet(_lower),
+    upperAndLowerCase: new CharSet(_upper + _lower)
+  };
+  var _initCore5 = function _initCore6() {
+    _coreInitted3 = gsap3 = _getGSAP();
+  };
+  var ScrambleTextPlugin = {
+    version: "3.12.2",
+    name: "scrambleText",
+    register: function register(core, Plugin, propTween) {
+      gsap3 = core;
+      _initCore5();
+    },
+    init: function init4(target, value, tween, index, targets) {
+      _coreInitted3 || _initCore5();
+      this.prop = "innerHTML" in target ? "innerHTML" : "textContent" in target ? "textContent" : 0;
+      if (!this.prop) {
+        return;
+      }
+      this.target = target;
+      if (typeof value !== "object") {
+        value = {
+          text: value
+        };
+      }
+      var text = value.text || value.value || "", trim = value.trim !== false, data = this, delim, maxLength, charset, splitByChars;
+      data.delimiter = delim = value.delimiter || "";
+      data.original = emojiSafeSplit(getText(target).replace(_spacesExp, " ").split("&nbsp;").join(""), delim, trim);
+      if (text === "{original}" || text === true || text == null) {
+        text = data.original.join(delim);
+      }
+      data.text = emojiSafeSplit((text || "").replace(_spacesExp, " "), delim, trim);
+      data.hasClass = !!(value.newClass || value.oldClass);
+      data.newClass = value.newClass;
+      data.oldClass = value.oldClass;
+      splitByChars = delim === "";
+      data.textHasEmoji = splitByChars && !!data.text.emoji;
+      data.charsHaveEmoji = !!value.chars && !!emojiSafeSplit(value.chars).emoji;
+      data.length = splitByChars ? data.original.length : data.original.join(delim).length;
+      data.lengthDif = (splitByChars ? data.text.length : data.text.join(delim).length) - data.length;
+      data.fillChar = value.fillChar || value.chars && ~value.chars.indexOf(" ") ? "&nbsp;" : "";
+      data.charSet = charset = _charsLookup[value.chars || "upperCase"] || new CharSet(value.chars);
+      data.speed = 0.05 / (value.speed || 1);
+      data.prevScrambleTime = 0;
+      data.setIndex = Math.random() * 20 | 0;
+      maxLength = data.length + Math.max(data.lengthDif, 0);
+      if (maxLength > charset.length) {
+        charset.grow(maxLength);
+      }
+      data.chars = charset.sets[data.setIndex];
+      data.revealDelay = value.revealDelay || 0;
+      data.tweenLength = value.tweenLength !== false;
+      data.tween = tween;
+      data.rightToLeft = !!value.rightToLeft;
+      data._props.push("scrambleText", "text");
+      return _bonusValidated2;
+    },
+    render: function render3(ratio, data) {
+      var target = data.target, prop = data.prop, text = data.text, delimiter = data.delimiter, tween = data.tween, prevScrambleTime = data.prevScrambleTime, revealDelay = data.revealDelay, setIndex = data.setIndex, chars = data.chars, charSet = data.charSet, length3 = data.length, textHasEmoji = data.textHasEmoji, charsHaveEmoji = data.charsHaveEmoji, lengthDif = data.lengthDif, tweenLength = data.tweenLength, oldClass = data.oldClass, newClass = data.newClass, rightToLeft = data.rightToLeft, fillChar = data.fillChar, speed = data.speed, original = data.original, hasClass = data.hasClass, l = text.length, time = tween._time, timeDif = time - prevScrambleTime, i2, i22, startText, endText, applyNew, applyOld, str, startClass, endClass, position, r2;
+      if (revealDelay) {
+        if (tween._from) {
+          time = tween._dur - time;
+        }
+        ratio = time === 0 ? 0 : time < revealDelay ? 1e-6 : time === tween._dur ? 1 : tween._ease((time - revealDelay) / (tween._dur - revealDelay));
+      }
+      if (ratio < 0) {
+        ratio = 0;
+      } else if (ratio > 1) {
+        ratio = 1;
+      }
+      if (rightToLeft) {
+        ratio = 1 - ratio;
+      }
+      i2 = ~~(ratio * l + 0.5);
+      if (ratio) {
+        if (timeDif > speed || timeDif < -speed) {
+          data.setIndex = setIndex = (setIndex + (Math.random() * 19 | 0)) % 20;
+          data.chars = charSet.sets[setIndex];
+          data.prevScrambleTime += timeDif;
+        }
+        endText = chars;
+      } else {
+        endText = original.join(delimiter);
+      }
+      r2 = tween._from ? ratio : 1 - ratio;
+      position = length3 + (tweenLength ? tween._from ? r2 * r2 * r2 : 1 - r2 * r2 * r2 : 1) * lengthDif;
+      if (rightToLeft) {
+        if (ratio === 1 && (tween._from || tween.data === "isFromStart")) {
+          startText = "";
+          endText = original.join(delimiter);
+        } else {
+          str = text.slice(i2).join(delimiter);
+          if (charsHaveEmoji) {
+            startText = emojiSafeSplit(endText).slice(0, position - (textHasEmoji ? emojiSafeSplit(str) : str).length + 0.5 | 0).join("");
+          } else {
+            startText = endText.substr(0, position - (textHasEmoji ? emojiSafeSplit(str) : str).length + 0.5 | 0);
+          }
+          endText = str;
+        }
+      } else {
+        startText = text.slice(0, i2).join(delimiter);
+        i22 = (textHasEmoji ? emojiSafeSplit(startText) : startText).length;
+        if (charsHaveEmoji) {
+          endText = emojiSafeSplit(endText).slice(i22, position + 0.5 | 0).join("");
+        } else {
+          endText = endText.substr(i22, position - i22 + 0.5 | 0);
+        }
+      }
+      if (hasClass) {
+        startClass = rightToLeft ? oldClass : newClass;
+        endClass = rightToLeft ? newClass : oldClass;
+        applyNew = startClass && i2 !== 0;
+        applyOld = endClass && i2 !== l;
+        str = (applyNew ? "<span class='" + startClass + "'>" : "") + startText + (applyNew ? "</span>" : "") + (applyOld ? "<span class='" + endClass + "'>" : "") + delimiter + endText + (applyOld ? "</span>" : "");
+      } else {
+        str = startText + delimiter + endText;
+      }
+      target[prop] = fillChar === "&nbsp;" && ~str.indexOf("  ") ? str.split("  ").join("&nbsp;&nbsp;") : str;
+    }
+  };
+  ScrambleTextPlugin.emojiSafeSplit = emojiSafeSplit;
+  ScrambleTextPlugin.getText = getText;
+  _getGSAP() && gsap3.registerPlugin(ScrambleTextPlugin);
+
+  // src/modules/animation/scramble.js
+  gsapWithCSS.registerPlugin(ScrambleTextPlugin);
+  var chars2 = "\u2596\u2597 \u2598 \u2599 \u259A \u259B \u259C \u259D \u259E \u259F";
+  var Scramble = class extends Alpha {
+    constructor({ element }) {
+      super({ element });
+      this.text = this.element.textContent;
+    }
+    animateIn() {
+      if (this.animation)
+        this.animation.kill();
+      this.animation = gsapWithCSS.to(this.animated, {
+        ...this.params.in,
+        ...this.anim
+      });
+      gsapWithCSS.to(this.animated, {
+        duration: 0.8 + Math.random() * 0.2,
+        scrambleText: {
+          chars: chars2,
+          revealDelay: 0.3,
+          text: this.text,
+          speed: 1,
+          delimiter: "",
+          rightToLeft: false
+        }
+      });
+    }
+    //   animateOut() {
+    //     this.stop();
+    //     if (this.animation) this.animation.kill();
+    //     this.animation = gsap.to(this.animated, {
+    //       ...this.params.out,
+    //       ...this.anim,
+    //     });
+    //   }
+    //   setIn() {
+    //     if (this.animation) this.animation.kill();
+    //     gsap.set(this.animated, { ...this.params.in });
+    //   }
+    setOut() {
+      if (this.animation)
+        this.animation.kill();
+      gsapWithCSS.set(this.animated, { ...this.params.out });
+    }
+  };
+
   // src/modules/dom.js
   var Dom = class {
     constructor() {
@@ -4950,12 +5248,25 @@
     }
     render(t2) {
     }
+    prep() {
+      document.querySelectorAll("[data-ca]").forEach((el) => {
+        el.setAttribute("data-a", el.getAttribute("data-ca"));
+        el.removeAttribute("data-ca");
+      });
+    }
     create() {
+      this.prep();
       this.texts = [
         ...document.querySelectorAll(
           '[data-a="char"],[data-a="word"],[data-a="line"]'
         )
       ].map((el) => new Text({ element: el }));
+      this.alphas = [...document.querySelectorAll('[data-a="alpha"]')].map(
+        (el) => new Alpha({ element: el })
+      );
+      this.scrambles = [...document.querySelectorAll('[data-a="scramble"]')].map(
+        (el) => new Scramble({ element: el })
+      );
       this.start();
     }
     start() {
@@ -4965,8 +5276,8 @@
         delay: 0.2
       });
       this.texts?.forEach((text) => text.start());
-      this.alpha?.start();
-      this.track?.start();
+      this.alphas?.forEach((alpha) => alpha.start());
+      this.scrambles?.forEach((scramble) => scramble.start());
     }
     destroy() {
       this.texts.forEach((text) => text.animateOut());
@@ -10104,6 +10415,486 @@ ${addLineNumbers(fragment2)}`);
     }
   };
 
+  // node_modules/.pnpm/@gsap+shockingly@3.12.2/node_modules/@gsap/shockingly/utils/paths.js
+  var _svgPathExp = /[achlmqstvz]|(-?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig;
+  var _scientific = /[\+\-]?\d*\.?\d+e[\+\-]?\d+/ig;
+  var _DEG2RAD2 = Math.PI / 180;
+  var _RAD2DEG2 = 180 / Math.PI;
+  var _sin2 = Math.sin;
+  var _cos2 = Math.cos;
+  var _abs = Math.abs;
+  var _sqrt2 = Math.sqrt;
+  var _isNumber3 = function _isNumber4(value) {
+    return typeof value === "number";
+  };
+  var _roundingNum = 1e5;
+  var _round3 = function _round4(value) {
+    return Math.round(value * _roundingNum) / _roundingNum || 0;
+  };
+  function transformRawPath(rawPath, a, b, c, d, tx, ty) {
+    var j = rawPath.length, segment, l, i2, x, y;
+    while (--j > -1) {
+      segment = rawPath[j];
+      l = segment.length;
+      for (i2 = 0; i2 < l; i2 += 2) {
+        x = segment[i2];
+        y = segment[i2 + 1];
+        segment[i2] = x * a + y * c + tx;
+        segment[i2 + 1] = x * b + y * d + ty;
+      }
+    }
+    rawPath._dirty = 1;
+    return rawPath;
+  }
+  function arcToSegment(lastX, lastY, rx, ry, angle2, largeArcFlag, sweepFlag, x, y) {
+    if (lastX === x && lastY === y) {
+      return;
+    }
+    rx = _abs(rx);
+    ry = _abs(ry);
+    var angleRad = angle2 % 360 * _DEG2RAD2, cosAngle = _cos2(angleRad), sinAngle = _sin2(angleRad), PI = Math.PI, TWOPI = PI * 2, dx2 = (lastX - x) / 2, dy2 = (lastY - y) / 2, x1 = cosAngle * dx2 + sinAngle * dy2, y1 = -sinAngle * dx2 + cosAngle * dy2, x1_sq = x1 * x1, y1_sq = y1 * y1, radiiCheck = x1_sq / (rx * rx) + y1_sq / (ry * ry);
+    if (radiiCheck > 1) {
+      rx = _sqrt2(radiiCheck) * rx;
+      ry = _sqrt2(radiiCheck) * ry;
+    }
+    var rx_sq = rx * rx, ry_sq = ry * ry, sq = (rx_sq * ry_sq - rx_sq * y1_sq - ry_sq * x1_sq) / (rx_sq * y1_sq + ry_sq * x1_sq);
+    if (sq < 0) {
+      sq = 0;
+    }
+    var coef = (largeArcFlag === sweepFlag ? -1 : 1) * _sqrt2(sq), cx1 = coef * (rx * y1 / ry), cy1 = coef * -(ry * x1 / rx), sx2 = (lastX + x) / 2, sy2 = (lastY + y) / 2, cx = sx2 + (cosAngle * cx1 - sinAngle * cy1), cy = sy2 + (sinAngle * cx1 + cosAngle * cy1), ux = (x1 - cx1) / rx, uy = (y1 - cy1) / ry, vx = (-x1 - cx1) / rx, vy = (-y1 - cy1) / ry, temp = ux * ux + uy * uy, angleStart = (uy < 0 ? -1 : 1) * Math.acos(ux / _sqrt2(temp)), angleExtent = (ux * vy - uy * vx < 0 ? -1 : 1) * Math.acos((ux * vx + uy * vy) / _sqrt2(temp * (vx * vx + vy * vy)));
+    isNaN(angleExtent) && (angleExtent = PI);
+    if (!sweepFlag && angleExtent > 0) {
+      angleExtent -= TWOPI;
+    } else if (sweepFlag && angleExtent < 0) {
+      angleExtent += TWOPI;
+    }
+    angleStart %= TWOPI;
+    angleExtent %= TWOPI;
+    var segments = Math.ceil(_abs(angleExtent) / (TWOPI / 4)), rawPath = [], angleIncrement = angleExtent / segments, controlLength = 4 / 3 * _sin2(angleIncrement / 2) / (1 + _cos2(angleIncrement / 2)), ma = cosAngle * rx, mb = sinAngle * rx, mc = sinAngle * -ry, md = cosAngle * ry, i2;
+    for (i2 = 0; i2 < segments; i2++) {
+      angle2 = angleStart + i2 * angleIncrement;
+      x1 = _cos2(angle2);
+      y1 = _sin2(angle2);
+      ux = _cos2(angle2 += angleIncrement);
+      uy = _sin2(angle2);
+      rawPath.push(x1 - controlLength * y1, y1 + controlLength * x1, ux + controlLength * uy, uy - controlLength * ux, ux, uy);
+    }
+    for (i2 = 0; i2 < rawPath.length; i2 += 2) {
+      x1 = rawPath[i2];
+      y1 = rawPath[i2 + 1];
+      rawPath[i2] = x1 * ma + y1 * mc + cx;
+      rawPath[i2 + 1] = x1 * mb + y1 * md + cy;
+    }
+    rawPath[i2 - 2] = x;
+    rawPath[i2 - 1] = y;
+    return rawPath;
+  }
+  function stringToRawPath(d) {
+    var a = (d + "").replace(_scientific, function(m) {
+      var n2 = +m;
+      return n2 < 1e-4 && n2 > -1e-4 ? 0 : n2;
+    }).match(_svgPathExp) || [], path = [], relativeX = 0, relativeY = 0, twoThirds = 2 / 3, elements = a.length, points = 0, errorMessage = "ERROR: malformed path: " + d, i2, j, x, y, command, isRelative, segment, startX, startY, difX, difY, beziers, prevCommand, flag1, flag2, line = function line2(sx, sy, ex, ey) {
+      difX = (ex - sx) / 3;
+      difY = (ey - sy) / 3;
+      segment.push(sx + difX, sy + difY, ex - difX, ey - difY, ex, ey);
+    };
+    if (!d || !isNaN(a[0]) || isNaN(a[1])) {
+      console.log(errorMessage);
+      return path;
+    }
+    for (i2 = 0; i2 < elements; i2++) {
+      prevCommand = command;
+      if (isNaN(a[i2])) {
+        command = a[i2].toUpperCase();
+        isRelative = command !== a[i2];
+      } else {
+        i2--;
+      }
+      x = +a[i2 + 1];
+      y = +a[i2 + 2];
+      if (isRelative) {
+        x += relativeX;
+        y += relativeY;
+      }
+      if (!i2) {
+        startX = x;
+        startY = y;
+      }
+      if (command === "M") {
+        if (segment) {
+          if (segment.length < 8) {
+            path.length -= 1;
+          } else {
+            points += segment.length;
+          }
+        }
+        relativeX = startX = x;
+        relativeY = startY = y;
+        segment = [x, y];
+        path.push(segment);
+        i2 += 2;
+        command = "L";
+      } else if (command === "C") {
+        if (!segment) {
+          segment = [0, 0];
+        }
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        segment.push(x, y, relativeX + a[i2 + 3] * 1, relativeY + a[i2 + 4] * 1, relativeX += a[i2 + 5] * 1, relativeY += a[i2 + 6] * 1);
+        i2 += 6;
+      } else if (command === "S") {
+        difX = relativeX;
+        difY = relativeY;
+        if (prevCommand === "C" || prevCommand === "S") {
+          difX += relativeX - segment[segment.length - 4];
+          difY += relativeY - segment[segment.length - 3];
+        }
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        segment.push(difX, difY, x, y, relativeX += a[i2 + 3] * 1, relativeY += a[i2 + 4] * 1);
+        i2 += 4;
+      } else if (command === "Q") {
+        difX = relativeX + (x - relativeX) * twoThirds;
+        difY = relativeY + (y - relativeY) * twoThirds;
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        relativeX += a[i2 + 3] * 1;
+        relativeY += a[i2 + 4] * 1;
+        segment.push(difX, difY, relativeX + (x - relativeX) * twoThirds, relativeY + (y - relativeY) * twoThirds, relativeX, relativeY);
+        i2 += 4;
+      } else if (command === "T") {
+        difX = relativeX - segment[segment.length - 4];
+        difY = relativeY - segment[segment.length - 3];
+        segment.push(relativeX + difX, relativeY + difY, x + (relativeX + difX * 1.5 - x) * twoThirds, y + (relativeY + difY * 1.5 - y) * twoThirds, relativeX = x, relativeY = y);
+        i2 += 2;
+      } else if (command === "H") {
+        line(relativeX, relativeY, relativeX = x, relativeY);
+        i2 += 1;
+      } else if (command === "V") {
+        line(relativeX, relativeY, relativeX, relativeY = x + (isRelative ? relativeY - relativeX : 0));
+        i2 += 1;
+      } else if (command === "L" || command === "Z") {
+        if (command === "Z") {
+          x = startX;
+          y = startY;
+          segment.closed = true;
+        }
+        if (command === "L" || _abs(relativeX - x) > 0.5 || _abs(relativeY - y) > 0.5) {
+          line(relativeX, relativeY, x, y);
+          if (command === "L") {
+            i2 += 2;
+          }
+        }
+        relativeX = x;
+        relativeY = y;
+      } else if (command === "A") {
+        flag1 = a[i2 + 4];
+        flag2 = a[i2 + 5];
+        difX = a[i2 + 6];
+        difY = a[i2 + 7];
+        j = 7;
+        if (flag1.length > 1) {
+          if (flag1.length < 3) {
+            difY = difX;
+            difX = flag2;
+            j--;
+          } else {
+            difY = flag2;
+            difX = flag1.substr(2);
+            j -= 2;
+          }
+          flag2 = flag1.charAt(1);
+          flag1 = flag1.charAt(0);
+        }
+        beziers = arcToSegment(relativeX, relativeY, +a[i2 + 1], +a[i2 + 2], +a[i2 + 3], +flag1, +flag2, (isRelative ? relativeX : 0) + difX * 1, (isRelative ? relativeY : 0) + difY * 1);
+        i2 += j;
+        if (beziers) {
+          for (j = 0; j < beziers.length; j++) {
+            segment.push(beziers[j]);
+          }
+        }
+        relativeX = segment[segment.length - 2];
+        relativeY = segment[segment.length - 1];
+      } else {
+        console.log(errorMessage);
+      }
+    }
+    i2 = segment.length;
+    if (i2 < 6) {
+      path.pop();
+      i2 = 0;
+    } else if (segment[0] === segment[i2 - 2] && segment[1] === segment[i2 - 1]) {
+      segment.closed = true;
+    }
+    path.totalPoints = points + i2;
+    return path;
+  }
+  function rawPathToString(rawPath) {
+    if (_isNumber3(rawPath[0])) {
+      rawPath = [rawPath];
+    }
+    var result = "", l = rawPath.length, sl, s2, i2, segment;
+    for (s2 = 0; s2 < l; s2++) {
+      segment = rawPath[s2];
+      result += "M" + _round3(segment[0]) + "," + _round3(segment[1]) + " C";
+      sl = segment.length;
+      for (i2 = 2; i2 < sl; i2++) {
+        result += _round3(segment[i2++]) + "," + _round3(segment[i2++]) + " " + _round3(segment[i2++]) + "," + _round3(segment[i2++]) + " " + _round3(segment[i2++]) + "," + _round3(segment[i2]) + " ";
+      }
+      if (segment.closed) {
+        result += "z";
+      }
+    }
+    return result;
+  }
+
+  // node_modules/.pnpm/@gsap+shockingly@3.12.2/node_modules/@gsap/shockingly/CustomEase.js
+  var gsap4;
+  var _coreInitted4;
+  var _getGSAP3 = function _getGSAP4() {
+    return gsap4 || typeof window !== "undefined" && (gsap4 = window.gsap) && gsap4.registerPlugin && gsap4;
+  };
+  var _initCore7 = function _initCore8() {
+    gsap4 = _getGSAP3();
+    if (gsap4) {
+      gsap4.registerEase("_CE", CustomEase.create);
+      _coreInitted4 = 1;
+    } else {
+      console.warn("Please gsap.registerPlugin(CustomEase)");
+    }
+  };
+  var _bigNum3 = 1e20;
+  var _round5 = function _round6(value) {
+    return ~~(value * 1e3 + (value < 0 ? -0.5 : 0.5)) / 1e3;
+  };
+  var _bonusValidated3 = 1;
+  var _numExp2 = /[-+=\.]*\d+[\.e\-\+]*\d*[e\-\+]*\d*/gi;
+  var _needsParsingExp = /[cLlsSaAhHvVtTqQ]/g;
+  var _findMinimum = function _findMinimum2(values) {
+    var l = values.length, min = _bigNum3, i2;
+    for (i2 = 1; i2 < l; i2 += 6) {
+      +values[i2] < min && (min = +values[i2]);
+    }
+    return min;
+  };
+  var _normalize = function _normalize2(values, height, originY) {
+    if (!originY && originY !== 0) {
+      originY = Math.max(+values[values.length - 1], +values[1]);
+    }
+    var tx = +values[0] * -1, ty = -originY, l = values.length, sx = 1 / (+values[l - 2] + tx), sy = -height || (Math.abs(+values[l - 1] - +values[1]) < 0.01 * (+values[l - 2] - +values[0]) ? _findMinimum(values) + ty : +values[l - 1] + ty), i2;
+    if (sy) {
+      sy = 1 / sy;
+    } else {
+      sy = -sx;
+    }
+    for (i2 = 0; i2 < l; i2 += 2) {
+      values[i2] = (+values[i2] + tx) * sx;
+      values[i2 + 1] = (+values[i2 + 1] + ty) * sy;
+    }
+  };
+  var _bezierToPoints = function _bezierToPoints2(x1, y1, x2, y2, x3, y3, x4, y4, threshold, points, index) {
+    var x12 = (x1 + x2) / 2, y12 = (y1 + y2) / 2, x23 = (x2 + x3) / 2, y23 = (y2 + y3) / 2, x34 = (x3 + x4) / 2, y34 = (y3 + y4) / 2, x123 = (x12 + x23) / 2, y123 = (y12 + y23) / 2, x234 = (x23 + x34) / 2, y234 = (y23 + y34) / 2, x1234 = (x123 + x234) / 2, y1234 = (y123 + y234) / 2, dx = x4 - x1, dy = y4 - y1, d2 = Math.abs((x2 - x4) * dy - (y2 - y4) * dx), d3 = Math.abs((x3 - x4) * dy - (y3 - y4) * dx), length3;
+    if (!points) {
+      points = [{
+        x: x1,
+        y: y1
+      }, {
+        x: x4,
+        y: y4
+      }];
+      index = 1;
+    }
+    points.splice(index || points.length - 1, 0, {
+      x: x1234,
+      y: y1234
+    });
+    if ((d2 + d3) * (d2 + d3) > threshold * (dx * dx + dy * dy)) {
+      length3 = points.length;
+      _bezierToPoints2(x1, y1, x12, y12, x123, y123, x1234, y1234, threshold, points, index);
+      _bezierToPoints2(x1234, y1234, x234, y234, x34, y34, x4, y4, threshold, points, index + 1 + (points.length - length3));
+    }
+    return points;
+  };
+  var CustomEase = /* @__PURE__ */ function() {
+    function CustomEase2(id, data, config3) {
+      _coreInitted4 || _initCore7();
+      this.id = id;
+      _bonusValidated3 && this.setData(data, config3);
+    }
+    var _proto = CustomEase2.prototype;
+    _proto.setData = function setData(data, config3) {
+      config3 = config3 || {};
+      data = data || "0,0,1,1";
+      var values = data.match(_numExp2), closest = 1, points = [], lookup = [], precision = config3.precision || 1, fast = precision <= 1, l, a1, a2, i2, inc, j, point, prevPoint, p;
+      this.data = data;
+      if (_needsParsingExp.test(data) || ~data.indexOf("M") && data.indexOf("C") < 0) {
+        values = stringToRawPath(data)[0];
+      }
+      l = values.length;
+      if (l === 4) {
+        values.unshift(0, 0);
+        values.push(1, 1);
+        l = 8;
+      } else if ((l - 2) % 6) {
+        throw "Invalid CustomEase";
+      }
+      if (+values[0] !== 0 || +values[l - 2] !== 1) {
+        _normalize(values, config3.height, config3.originY);
+      }
+      this.segment = values;
+      for (i2 = 2; i2 < l; i2 += 6) {
+        a1 = {
+          x: +values[i2 - 2],
+          y: +values[i2 - 1]
+        };
+        a2 = {
+          x: +values[i2 + 4],
+          y: +values[i2 + 5]
+        };
+        points.push(a1, a2);
+        _bezierToPoints(a1.x, a1.y, +values[i2], +values[i2 + 1], +values[i2 + 2], +values[i2 + 3], a2.x, a2.y, 1 / (precision * 2e5), points, points.length - 1);
+      }
+      l = points.length;
+      for (i2 = 0; i2 < l; i2++) {
+        point = points[i2];
+        prevPoint = points[i2 - 1] || point;
+        if ((point.x > prevPoint.x || prevPoint.y !== point.y && prevPoint.x === point.x || point === prevPoint) && point.x <= 1) {
+          prevPoint.cx = point.x - prevPoint.x;
+          prevPoint.cy = point.y - prevPoint.y;
+          prevPoint.n = point;
+          prevPoint.nx = point.x;
+          if (fast && i2 > 1 && Math.abs(prevPoint.cy / prevPoint.cx - points[i2 - 2].cy / points[i2 - 2].cx) > 2) {
+            fast = 0;
+          }
+          if (prevPoint.cx < closest) {
+            if (!prevPoint.cx) {
+              prevPoint.cx = 1e-3;
+              if (i2 === l - 1) {
+                prevPoint.x -= 1e-3;
+                closest = Math.min(closest, 1e-3);
+                fast = 0;
+              }
+            } else {
+              closest = prevPoint.cx;
+            }
+          }
+        } else {
+          points.splice(i2--, 1);
+          l--;
+        }
+      }
+      l = 1 / closest + 1 | 0;
+      inc = 1 / l;
+      j = 0;
+      point = points[0];
+      if (fast) {
+        for (i2 = 0; i2 < l; i2++) {
+          p = i2 * inc;
+          if (point.nx < p) {
+            point = points[++j];
+          }
+          a1 = point.y + (p - point.x) / point.cx * point.cy;
+          lookup[i2] = {
+            x: p,
+            cx: inc,
+            y: a1,
+            cy: 0,
+            nx: 9
+          };
+          if (i2) {
+            lookup[i2 - 1].cy = a1 - lookup[i2 - 1].y;
+          }
+        }
+        lookup[l - 1].cy = points[points.length - 1].y - a1;
+      } else {
+        for (i2 = 0; i2 < l; i2++) {
+          if (point.nx < i2 * inc) {
+            point = points[++j];
+          }
+          lookup[i2] = point;
+        }
+        if (j < points.length - 1) {
+          lookup[i2 - 1] = points[points.length - 2];
+        }
+      }
+      this.ease = function(p2) {
+        var point2 = lookup[p2 * l | 0] || lookup[l - 1];
+        if (point2.nx < p2) {
+          point2 = point2.n;
+        }
+        return point2.y + (p2 - point2.x) / point2.cx * point2.cy;
+      };
+      this.ease.custom = this;
+      this.id && gsap4 && gsap4.registerEase(this.id, this.ease);
+      return this;
+    };
+    _proto.getSVGData = function getSVGData(config3) {
+      return CustomEase2.getSVGData(this, config3);
+    };
+    CustomEase2.create = function create(id, data, config3) {
+      return new CustomEase2(id, data, config3).ease;
+    };
+    CustomEase2.register = function register2(core) {
+      gsap4 = core;
+      _initCore7();
+    };
+    CustomEase2.get = function get(id) {
+      return gsap4.parseEase(id);
+    };
+    CustomEase2.getSVGData = function getSVGData(ease, config3) {
+      config3 = config3 || {};
+      var width = config3.width || 100, height = config3.height || 100, x = config3.x || 0, y = (config3.y || 0) + height, e2 = gsap4.utils.toArray(config3.path)[0], a, slope, i2, inc, tx, ty, precision, threshold, prevX, prevY;
+      if (config3.invert) {
+        height = -height;
+        y = 0;
+      }
+      if (typeof ease === "string") {
+        ease = gsap4.parseEase(ease);
+      }
+      if (ease.custom) {
+        ease = ease.custom;
+      }
+      if (ease instanceof CustomEase2) {
+        a = rawPathToString(transformRawPath([ease.segment], width, 0, 0, -height, x, y));
+      } else {
+        a = [x, y];
+        precision = Math.max(5, (config3.precision || 1) * 200);
+        inc = 1 / precision;
+        precision += 2;
+        threshold = 5 / precision;
+        prevX = _round5(x + inc * width);
+        prevY = _round5(y + ease(inc) * -height);
+        slope = (prevY - y) / (prevX - x);
+        for (i2 = 2; i2 < precision; i2++) {
+          tx = _round5(x + i2 * inc * width);
+          ty = _round5(y + ease(i2 * inc) * -height);
+          if (Math.abs((ty - prevY) / (tx - prevX) - slope) > threshold || i2 === precision - 1) {
+            a.push(prevX, prevY);
+            slope = (ty - prevY) / (tx - prevX);
+          }
+          prevX = tx;
+          prevY = ty;
+        }
+        a = "M" + a.join(",");
+      }
+      e2 && e2.setAttribute("d", a);
+      return a;
+    };
+    return CustomEase2;
+  }();
+  _getGSAP3() && gsap4.registerPlugin(CustomEase);
+  CustomEase.version = "3.12.2";
+
+  // src/util/ease.js
+  gsapWithCSS.registerPlugin(CustomEase);
+  var bounceEase = CustomEase.create(
+    "custom",
+    "M0,0 C0.126,0.382 0.18,0.726 0.241,0.726 0.397,0.726 0.482,-0.234 0.619,-0.234 0.746,-0.234 0.768,0 1,0 "
+  );
+
   // src/gl/cube.js
   var Cube = class extends Transform {
     start = 0;
@@ -10113,7 +10904,8 @@ ${addLineNumbers(fragment2)}`);
       scale: 0.1,
       lspeed: 0,
       initial: 3,
-      c_hover: 0
+      c_hover: 0,
+      click: 0
     };
     constructor(gl, { mesh, mtc1, mtc2: mtc22 } = {}) {
       super();
@@ -10167,20 +10959,20 @@ ${addLineNumbers(fragment2)}`);
       this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
       this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
       this.position.x = this.a.mx * 0.5;
+      let z = 0;
       if (!window.isDebug) {
-        this.position.y = this.a.my * 1 + window.sscroll.percent * 0.8 + // move up on percent
+        this.position.y = this.a.my * 1 + window.sscroll.percent * 0.4 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial;
         this.a.scale = 0.1 + window.sscroll.percent * 0.05 + this.mat.a.hover * 0.02;
         this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
         rx += window.sscroll.a.lp * 5;
         ry += window.sscroll.a.lp * 5;
-        const z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
-        this.position.z = -z;
-      } else {
+        z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
       }
-      this.rotation.x = rx;
-      this.rotation.y = ry;
+      this.position.z = -z - this.a.click;
+      this.rotation.x = rx + this.a.click * 0.2;
+      this.rotation.y = ry + this.a.click * 0.2;
       this.mat.time = t2;
     }
     resize() {
@@ -10190,6 +10982,18 @@ ${addLineNumbers(fragment2)}`);
       [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
         el.addEventListener("mouseenter", () => this.mouseCta(1));
         el.addEventListener("mouseleave", () => this.mouseCta(0));
+      });
+      let locked = false;
+      document.addEventListener("click", () => {
+        if (locked)
+          return;
+        locked = true;
+        gsapWithCSS.to(this.a, {
+          click: 5,
+          duration: 1.6,
+          ease: bounceEase,
+          onComplete: () => locked = false
+        });
       });
     }
     /** Animations */
@@ -10227,7 +11031,7 @@ ${addLineNumbers(fragment2)}`);
       this.cube.setParent(this.g);
       this.g.setParent(this);
       if (!window.isDebug)
-        this.g.position.y -= 0.6;
+        this.g.position.y -= 0.4;
     }
     render(t2) {
       if (!this.isOn)
@@ -10378,6 +11182,39 @@ ${addLineNumbers(fragment2)}`);
 @gsap/shockingly/SplitText.js:
   (*!
    * SplitText: 3.12.2
+   * https://greensock.com
+   *
+   * @license Copyright 2008-2023, GreenSock. All rights reserved.
+   * Subject to the terms at https://greensock.com/standard-license or for
+   * Club GreenSock members, the agreement issued with that membership.
+   * @author: Jack Doyle, jack@greensock.com
+  *)
+
+@gsap/shockingly/ScrambleTextPlugin.js:
+  (*!
+   * ScrambleTextPlugin 3.12.2
+   * https://greensock.com
+   *
+   * @license Copyright 2008-2023, GreenSock. All rights reserved.
+   * Subject to the terms at https://greensock.com/standard-license or for
+   * Club GreenSock members, the agreement issued with that membership.
+   * @author: Jack Doyle, jack@greensock.com
+  *)
+
+@gsap/shockingly/utils/paths.js:
+  (*!
+   * paths 3.12.2
+   * https://greensock.com
+   *
+   * Copyright 2008-2023, GreenSock. All rights reserved.
+   * Subject to the terms at https://greensock.com/standard-license or for
+   * Club GreenSock members, the agreement issued with that membership.
+   * @author: Jack Doyle, jack@greensock.com
+  *)
+
+@gsap/shockingly/CustomEase.js:
+  (*!
+   * CustomEase 3.12.2
    * https://greensock.com
    *
    * @license Copyright 2008-2023, GreenSock. All rights reserved.
