@@ -1,7 +1,9 @@
 import { Text } from "./animation/text";
+import { FormHandler } from "./form";
 // import { Track } from "../util/track";
 import { Alpha } from "./animation/alpha";
 import { Scramble } from "./animation/scramble";
+import { Scale } from "./animation/scale";
 import Tween from "gsap";
 
 export class Dom {
@@ -40,7 +42,11 @@ export class Dom {
       (el) => new Scramble({ element: el })
     );
 
-    // console.log(this.alphas);
+    this.scales = [
+      ...document.querySelectorAll('[data-a="s"],[data-a="sx"],[data-a="sy"]'),
+    ].map((el) => new Scale({ element: el }));
+
+    this.form = new FormHandler();
 
     this.start();
   }
@@ -55,6 +61,7 @@ export class Dom {
     this.texts?.forEach((text) => text.start());
     this.alphas?.forEach((alpha) => alpha.start());
     this.scrambles?.forEach((scramble) => scramble.start());
+    this.scales?.forEach((scale) => scale.start());
 
     // this.track?.start();
   }

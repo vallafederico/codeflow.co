@@ -16,13 +16,16 @@ export class Scramble extends Alpha {
 
   animateIn() {
     if (this.animation) this.animation.kill();
+
     this.animation = gsap.to(this.animated, {
       ...this.params.in,
       ...this.anim,
     });
 
-    gsap.to(this.animated, {
-      duration: 0.8 + Math.random() * 0.2,
+    if (this.scAnimation) this.scAnimation.kill();
+    this.scAnimation = gsap.to(this.animated, {
+      duration: 0.6 + Math.random() * 0.3,
+      delay: 0,
       scrambleText: {
         chars: chars2,
         revealDelay: 0.3,

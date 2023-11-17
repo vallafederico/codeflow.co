@@ -4960,6 +4960,48 @@
     wrapper.appendChild(el);
   }
 
+  // src/modules/form.js
+  var FormHandler = class {
+    constructor() {
+      this.form = document.querySelector("[data-dom='form']");
+      if (this.form) {
+        this.initEvents();
+      }
+    }
+    initEvents() {
+      const obs = new MutationObserver((mutationsList, observer) => {
+        window.app.gl.scene.cube.animateFormSuccess();
+      });
+      obs.observe(this.form.querySelector("[data-listen='success']"), {
+        attributes: true,
+        attributeFilter: ["style"]
+      });
+      const field = this.form.querySelector("[data-validate='email']");
+      this.submitBtn = this.form.querySelector("[data-form='submit']");
+      this.fields = [...this.form.querySelectorAll("input")].map((el, i2) => {
+        el.addEventListener("input", () => {
+          this.isValid();
+        });
+        return el;
+      });
+    }
+    isValid() {
+      let valid = true;
+      this.fields.forEach((field) => {
+        if (!field.checkValidity()) {
+          valid = false;
+        }
+      });
+      if (valid) {
+        this.submitBtn.classList.remove("lock");
+        this.submitBtn.style.pointerEvents = "auto";
+      } else {
+        this.submitBtn.classList.add("lock");
+        this.submitBtn.style.pointerEvents = "none";
+      }
+    }
+  };
+
   // src/modules/animation/alpha.js
   var Alpha = class extends Observe {
     constructor({ element, anim, params, once = false }) {
@@ -5207,8 +5249,11 @@
         ...this.params.in,
         ...this.anim
       });
-      gsapWithCSS.to(this.animated, {
-        duration: 0.8 + Math.random() * 0.2,
+      if (this.scAnimation)
+        this.scAnimation.kill();
+      this.scAnimation = gsapWithCSS.to(this.animated, {
+        duration: 0.6 + Math.random() * 0.3,
+        delay: 0,
         scrambleText: {
           chars: chars2,
           revealDelay: 0.3,
@@ -5237,6 +5282,76 @@
       gsapWithCSS.set(this.animated, { ...this.params.out });
     }
   };
+
+  // src/modules/animation/scale.js
+  var Scale = class extends Alpha {
+    constructor({ element }) {
+      super({ element });
+      this.anim = {
+        duration: 1.2 + Math.random() * 0.2,
+        ease: "expo.out",
+        delay: 0.1,
+        transformOrigin: this.element.dataset.origin || "right center",
+        stagger: {
+          each: 0.05,
+          from: "start"
+        }
+      };
+      this.params = getDirection(this.element.dataset.a);
+    }
+    animateIn() {
+      if (this.animation)
+        this.animation.kill();
+      this.animation = gsapWithCSS.to(this.animated, {
+        ...this.params.in,
+        ...this.anim
+      });
+    }
+    setOut() {
+      if (this.animation)
+        this.animation.kill();
+      gsapWithCSS.set(this.animated, { ...this.params.out });
+    }
+  };
+  function getDirection(data) {
+    switch (data) {
+      case "sx":
+        return {
+          in: {
+            scaleX: 1,
+            scaleY: 1
+          },
+          out: {
+            scaleX: 0,
+            scaleY: 1
+          }
+        };
+      case "sy":
+        return {
+          in: {
+            scaleX: 1,
+            scaleY: 1
+          },
+          out: {
+            scaleX: 1,
+            scaleY: 0
+          }
+        };
+      case "s":
+        return {
+          in: {
+            scaleX: 1,
+            scaleY: 1
+          },
+          out: {
+            scaleX: 0,
+            scaleY: 0
+          }
+        };
+      default:
+        return 0;
+    }
+  }
 
   // src/modules/dom.js
   var Dom = class {
@@ -5267,6 +5382,10 @@
       this.scrambles = [...document.querySelectorAll('[data-a="scramble"]')].map(
         (el) => new Scramble({ element: el })
       );
+      this.scales = [
+        ...document.querySelectorAll('[data-a="s"],[data-a="sx"],[data-a="sy"]')
+      ].map((el) => new Scale({ element: el }));
+      this.form = new FormHandler();
       this.start();
     }
     start() {
@@ -5278,6 +5397,7 @@
       this.texts?.forEach((text) => text.start());
       this.alphas?.forEach((alpha) => alpha.start());
       this.scrambles?.forEach((scramble) => scramble.start());
+      this.scales?.forEach((scale5) => scale5.start());
     }
     destroy() {
       this.texts.forEach((text) => text.animateOut());
@@ -10921,24 +11041,36 @@ ${addLineNumbers(fragment2)}`);
       this.mesh.setParent(this.ctrl);
       const scale5 = this.a.scale;
       this.mesh.scale.set(scale5, scale5, scale5);
-      let d = 0.8;
-      setInterval(() => {
-        this.scramble(d);
-      }, d * 1100);
       this.spinner = new Spinner();
       gsapWithCSS.to(this.a, {
         initial: 0,
         ease: "back.out",
         duration: 1.2
       });
+      this.startInterval();
       this.initEvents();
     }
-    scramble(dur) {
+    startInterval(start = true) {
+      let d = 0.8;
+      if (start) {
+        this.interval = setInterval(() => this.scramble(d), d * 1100);
+      } else {
+        this.shouldReset = true;
+        clearInterval(this.interval);
+      }
+    }
+    resetCube() {
+      this.shouldReset = false;
+      this.mesh.children.forEach((m) => m.rotation.y = 0);
+      this.ctrl.rotation.x = 0;
+      this.ctrl.rotation.z = 0;
+    }
+    scramble(dur, rotateAxis = true) {
       this.start++;
       if (this.start > 2)
         this.start = 0;
       const base = this.mesh.children[this.start].rotation.y;
-      const direction = Math.random() > 25 ? 1 : -1;
+      const direction = Math.random() > 0.5 ? 1 : -1;
       const amount = Math.random() > 0.5 ? Math.PI / 2 : Math.PI;
       const ease = Math.random() > 0.5 ? "slow.out" : "back.inOut";
       gsapWithCSS.to(this.mesh.children[this.start].rotation, {
@@ -10946,7 +11078,13 @@ ${addLineNumbers(fragment2)}`);
         duration: dur,
         ease,
         onComplete: () => {
-          Math.random() > 0.5 ? this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2 : this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2;
+          if (this.shouldReset) {
+            this.resetCube();
+          } else {
+            if (!rotateAxis)
+              return;
+            Math.random() > 0.5 ? this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2 : this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2;
+          }
         }
       });
     }
@@ -10960,8 +11098,9 @@ ${addLineNumbers(fragment2)}`);
       this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
       this.position.x = this.a.mx * 0.5;
       let z = 0;
+      let y = 0;
       if (!window.isDebug) {
-        this.position.y = this.a.my * 1 + window.sscroll.percent * 0.4 + // move up on percent
+        y = window.sscroll.percent * 0.4 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial;
         this.a.scale = 0.1 + window.sscroll.percent * 0.05 + this.mat.a.hover * 0.02;
@@ -10971,6 +11110,7 @@ ${addLineNumbers(fragment2)}`);
         z = Math.abs(Math.sin(this.position.x)) - Math.abs(Math.sin(this.position.y));
       }
       this.position.z = -z - this.a.click;
+      this.position.y = y + this.a.my * 1;
       this.rotation.x = rx + this.a.click * 0.2;
       this.rotation.y = ry + this.a.click * 0.2;
       this.mat.time = t2;
@@ -11005,6 +11145,8 @@ ${addLineNumbers(fragment2)}`);
         ease: "expo.out",
         duration: 1.2
       });
+    }
+    animateFormSuccess() {
     }
   };
 
@@ -11143,6 +11285,15 @@ ${addLineNumbers(fragment2)}`);
   };
   window.isDebug = window.location.pathname === "/webgl";
   window.app = new App();
+  (() => {
+    setTimeout(() => {
+      console.log(
+        "%c%s",
+        "font-size:10px; color:#fff; background:#000; padding: 10px 10px; margin: 20px 0px;",
+        "CC HTTPS://FEDERIC.OOO \u{1F440}"
+      );
+    }, 1e3);
+  })();
 })();
 /*! Bundled license information:
 

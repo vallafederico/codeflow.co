@@ -34,11 +34,6 @@ export class Cube extends Transform {
     const scale = this.a.scale;
     this.mesh.scale.set(scale, scale, scale);
 
-    let d = 0.8;
-    setInterval(() => {
-      this.scramble(d);
-    }, d * 1100);
-
     this.spinner = new Spinner();
 
     Tween.to(this.a, {
@@ -47,15 +42,37 @@ export class Cube extends Transform {
       duration: 1.2,
     });
 
+    this.startInterval();
     this.initEvents();
+
+    // setTimeout(() => this.startInterval(false), 5000);
+    // setTimeout(() => this.startInterval(true), 10000);
   }
 
-  scramble(dur) {
+  startInterval(start = true) {
+    let d = 0.8;
+
+    if (start) {
+      this.interval = setInterval(() => this.scramble(d), d * 1100);
+    } else {
+      this.shouldReset = true;
+      clearInterval(this.interval);
+    }
+  }
+
+  resetCube() {
+    this.shouldReset = false;
+    this.mesh.children.forEach((m) => (m.rotation.y = 0));
+    this.ctrl.rotation.x = 0;
+    this.ctrl.rotation.z = 0;
+  }
+
+  scramble(dur, rotateAxis = true) {
     this.start++;
     if (this.start > 2) this.start = 0;
 
     const base = this.mesh.children[this.start].rotation.y;
-    const direction = Math.random() > 25 ? 1 : -1;
+    const direction = Math.random() > 0.5 ? 1 : -1;
     const amount = Math.random() > 0.5 ? Math.PI / 2 : Math.PI;
     const ease = Math.random() > 0.5 ? "slow.out" : "back.inOut";
 
@@ -64,9 +81,14 @@ export class Cube extends Transform {
       duration: dur,
       ease: ease,
       onComplete: () => {
-        Math.random() > 0.5
-          ? (this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2)
-          : (this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2);
+        if (this.shouldReset) {
+          this.resetCube();
+        } else {
+          if (!rotateAxis) return;
+          Math.random() > 0.5
+            ? (this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2)
+            : (this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2);
+        }
       },
     });
   }
@@ -88,12 +110,12 @@ export class Cube extends Transform {
     this.position.x = this.a.mx * 0.5;
 
     let z = 0;
+    let y = 0;
     if (!window.isDebug) {
       // actual page
 
       // position y
-      this.position.y =
-        this.a.my * 1 +
+      y =
         window.sscroll.percent * 0.4 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial; // initial animation
@@ -114,6 +136,7 @@ export class Cube extends Transform {
 
     // ++ apply rotation
     this.position.z = -z - this.a.click;
+    this.position.y = y + this.a.my * 1;
     this.rotation.x = rx + this.a.click * 0.2;
     this.rotation.y = ry + this.a.click * 0.2;
 
@@ -136,21 +159,12 @@ export class Cube extends Transform {
     document.addEventListener("click", () => {
       if (locked) return;
       locked = true;
-
       Tween.to(this.a, {
         click: 5,
         duration: 1.6,
         ease: bounceEase,
         onComplete: () => (locked = false),
       });
-
-      // Tween.to(this.a, {
-      //   click: 0,
-      //   delay: 0.3,
-      //   duration: 0.8,
-      //   ease: "back.out",
-      //   onComplete: () => (locked = false),
-      // });
     });
   }
 
@@ -164,5 +178,9 @@ export class Cube extends Transform {
       ease: "expo.out",
       duration: 1.2,
     });
+  }
+
+  animateFormSuccess() {
+    // console.log("animateFormSuccess");
   }
 }
