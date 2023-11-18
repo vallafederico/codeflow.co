@@ -19,7 +19,7 @@ export class Text extends Observe {
     this.anim = {
       duration: 1.2,
       ease: "expo.out",
-      delay: 0.1,
+      delay: window.isMobile ? 0 : 0.1,
       stagger: {
         each: 0.05,
         from: "start",

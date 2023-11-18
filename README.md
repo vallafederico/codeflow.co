@@ -8,8 +8,8 @@ to make js thing and interact with the cube
 ## Todo
 
 - [ ] Button animation
-- [ ] solve cube
+- [x] solve cube
 - [x] form validation and states
-- [ ] for correctly submitted cube state
-- [ ] privacy policy
+- [x] for correctly submitted cube state
+- [x] privacy policy
 - [ ] cookie policy (?)

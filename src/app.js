@@ -1,4 +1,5 @@
-import "./style/main.css";
+// import "./style/main.css";
+import { isTablet } from "./util/device";
 
 import { Dom } from "./modules/dom";
 import { Viewport } from "./modules/viewport";
@@ -12,7 +13,7 @@ class App {
     this.viewport = new Viewport();
 
     this.time = 0;
-
+    this.resize();
     this.init();
   }
 
@@ -31,7 +32,9 @@ class App {
     new ResizeObserver((entry) => this.resize(entry[0])).observe(this.body);
   }
 
-  resize({ contentRect }) {
+  resize({ contentRect } = {}) {
+    window.isMobile = isTablet();
+
     this.viewport?.resize();
     this.dom?.resize();
   }

@@ -111,18 +111,15 @@ export class Cube extends Transform {
     let rx = this.spinner.spin.y * 0.1 + rt;
     let ry = this.spinner.spin.x * 0.1 + rt;
 
-    // rx -= this.a.initial;
-    // ry += this.a.initial;
-
-    this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
-    this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
-    this.position.x = this.a.mx * 0.5;
+    if (!window.isMobile) {
+      this.a.mx = lerp(this.a.mx, this.spinner.velocity.x, 0.1);
+      this.a.my = lerp(this.a.my, -this.spinner.velocity.y, 0.1);
+      this.position.x = this.a.mx * 0.5;
+    }
 
     let z = 0;
     let y = 0;
     if (!window.isDebug) {
-      // actual page
-
       // position y
       y =
         window.sscroll.percent * 0.4 + // move up on percent
@@ -130,9 +127,9 @@ export class Cube extends Transform {
         this.a.initial; // initial animation
 
       this.a.scale =
-        0.1 + window.sscroll.percent * 0.05 + this.mat.a.hover * 0.02;
-
-      this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
+        0.1 +
+        window.sscroll.percent * (window.isMobile ? 0 : 0.05) +
+        this.mat.a.hover * 0.02;
 
       // rotation
       rx += window.sscroll.a.lp * 5;
@@ -144,6 +141,7 @@ export class Cube extends Transform {
     }
 
     // ++ apply rotation
+    this.mesh.scale.set(this.a.scale, this.a.scale, this.a.scale);
     this.position.z = -z - this.a.click;
     this.position.y = y + this.a.my * 1;
     this.rotation.x = rx + this.a.click * 0.2;
@@ -158,10 +156,19 @@ export class Cube extends Transform {
   /** Init Events */
   initEvents() {
     // + cta hover
-    [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
-      el.addEventListener("mouseenter", () => this.mouseCta(1));
-      el.addEventListener("mouseleave", () => this.mouseCta(0));
-    });
+    if (!window.isMobile) {
+      [...document.querySelectorAll("[data-a='cta']")].forEach((el) => {
+        el.addEventListener("mouseenter", () => this.mouseCta(1));
+        el.addEventListener("mouseleave", () => this.mouseCta(0));
+      });
+
+      ////// >>> temp
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "!") {
+          this.solveCube();
+        }
+      });
+    }
 
     //  + click
     let locked = false;
@@ -174,13 +181,6 @@ export class Cube extends Transform {
         ease: bounceEase,
         onComplete: () => (locked = false),
       });
-    });
-
-    ////// >>> temp
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "!") {
-        this.solveCube();
-      }
     });
   }
 
@@ -218,7 +218,7 @@ export class Cube extends Transform {
     Tween.to(this.mat.uniforms.u_a_solved, {
       value: 1,
       duration: 1.8,
-      delay: 0.6,
+      delay: 0.4,
       ease: "elastic.inOut",
       onComplete: () => {
         setTimeout(() => {
