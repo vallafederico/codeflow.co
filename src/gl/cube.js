@@ -17,6 +17,11 @@ export class Cube extends Transform {
     click: 0,
   };
 
+  cb = {
+    isSolved: false,
+    rotateAxis: true,
+  };
+
   constructor(gl, { mesh, mtc1, mtc2 } = {}) {
     super();
     this.gl = gl;
@@ -52,6 +57,8 @@ export class Cube extends Transform {
   startInterval(start = true) {
     let d = 0.8;
 
+    // this.cb.rotateAxis = true;
+
     if (start) {
       this.interval = setInterval(() => this.scramble(d), d * 1100);
     } else {
@@ -67,7 +74,7 @@ export class Cube extends Transform {
     this.ctrl.rotation.z = 0;
   }
 
-  scramble(dur, rotateAxis = true) {
+  scramble(dur) {
     this.start++;
     if (this.start > 2) this.start = 0;
 
@@ -84,7 +91,9 @@ export class Cube extends Transform {
         if (this.shouldReset) {
           this.resetCube();
         } else {
-          if (!rotateAxis) return;
+          // console.log("rotateAxis", this.rotateAxis);
+          if (!this.cb.rotateAxis) return;
+
           Math.random() > 0.5
             ? (this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2)
             : (this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2);
@@ -166,21 +175,57 @@ export class Cube extends Transform {
         onComplete: () => (locked = false),
       });
     });
+
+    ////// >>> temp
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "!") {
+        this.solveCube();
+      }
+    });
   }
 
   /** Animations */
   mouseCta(val = 0) {
+    if (this.cb.isSolved) return;
     // console.log("cta", val);
+
+    val > 0.5 ? (this.cb.rotateAxis = false) : null;
 
     if (this.mouseCtaAnimation) this.mouseCtaAnimation.kill();
     this.mouseCtaAnimation = Tween.to(this.mat.a, {
       hover: val,
       ease: "expo.out",
       duration: 1.2,
+      onComplete: () => {
+        if (val < 0.5) {
+          this.startInterval(false);
+          this.startInterval();
+        }
+      },
     });
   }
 
   animateFormSuccess() {
     // console.log("animateFormSuccess");
+
+    this.solveCube();
+  }
+
+  solveCube() {
+    this.cb.isSolved = true;
+    this.startInterval(false);
+
+    Tween.to(this.mat.uniforms.u_a_solved, {
+      value: 1,
+      duration: 1.8,
+      delay: 0.6,
+      ease: "elastic.inOut",
+      onComplete: () => {
+        setTimeout(() => {
+          this.cb.rotateAxis = false;
+          this.startInterval();
+        }, 1000);
+      },
+    });
   }
 }

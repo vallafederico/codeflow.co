@@ -8,15 +8,17 @@ uniform float u_time;
 
 uniform sampler2D u_mtc1;
 uniform sampler2D u_mtc2;
+uniform sampler2D u_col_map;
 
 vec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);
-// vec3 COL_RED = vec3(1., 0., 0.);
-// vec3 COL_YEL = vec3(1., 1., 0.);
-// vec3 COL_BLU = vec3(0., 0., 1.);
+
 
 uniform float u_a_hover;
+uniform float u_a_solved;
+// uniform vec2 u_a_mouse;
 
 void main() {
+    vec3 color_map = texture2D(u_col_map, v_uv).rgb;
 
     // (FRAGMENT)
     vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));
@@ -34,13 +36,40 @@ void main() {
 
     vec3 col = mtc;
 
+    // * hover 
     float rev_split = 1. - split;
-    col = mix(mtc, mtc + .1, rev_split * u_a_hover); // * hover 
+    col = mix(
+        mtc, 
+        mtc * .1, 
+        rev_split * u_a_hover
+    ); 
+
+    // mix w/ color map
+    col = mix(
+        col, 
+        // mtc / (1. + color_map * 1.), 
+        col + color_map * .1, 
+        rev_split * u_a_hover
+    ); 
+
+    col = mix(
+        col, 
+        col + color_map, 
+        rev_split * u_a_solved
+    );
+    
+
+
 
     
 
 
     gl_FragColor.rgb = col;
-    // gl_FragColor.rgb = vec3(col_map);
+    // gl_FragColor.rgb = vec3(color_map);
     gl_FragColor.a = 1.0;
 }
+
+
+    // + lights
+    // float ptl = dot(normalize(vec3(u_a_mouse.x, u_a_mouse.y, 1.)), v_normal);
+    // col *= ptl * .5;

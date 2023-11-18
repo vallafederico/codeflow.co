@@ -4987,9 +4987,15 @@
     }
     isValid() {
       let valid = true;
-      this.fields.forEach((field) => {
-        if (!field.checkValidity()) {
-          valid = false;
+      this.fields.forEach((field, i2) => {
+        if (field.type === "email") {
+          if (validateEmail(field.value) == false) {
+            valid = false;
+          }
+        } else {
+          if (!field.checkValidity()) {
+            valid = false;
+          }
         }
       });
       if (valid) {
@@ -5001,6 +5007,12 @@
       }
     }
   };
+  function validateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    return false;
+  }
 
   // src/modules/animation/alpha.js
   var Alpha = class extends Observe {
@@ -10406,10 +10418,11 @@ ${addLineNumbers(fragment2)}`);
   var mtc = isLocal ? "http://localhost:8000/asset/mtc16.png" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637d3fc6e06242f0d7c95_mtc16.webp";
   var mtc2 = isLocal ? "http://localhost:8000/asset/mtc3.png" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637d30b73cf212f61b644_mtc3.webp";
   var cube = isLocal ? "http://localhost:8000/asset/cube8.glb" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/655637ab023b9146c71771e3_cube8.glb.txt";
+  var col_map = isLocal ? "http://localhost:8000/asset/col_map.jpg" : "https://uploads-ssl.webflow.com/651ef6c5494f36508ea49212/6558b79dde12de54c5a514a9_col_map.webp";
   var ASSETS = {
-    // tile: "http://localhost:8000/asset/tile2.glb",
     mtc,
     mtc2,
+    col_map,
     cube
   };
 
@@ -10437,15 +10450,18 @@ ${addLineNumbers(fragment2)}`);
       this.gl = gl;
     }
     async load() {
-      let [mtc3, mtc22, cube2] = await Promise.all([
+      let [mtc3, mtc22, col_map2, cube2] = await Promise.all([
         loadTexture(this.gl, ASSETS.mtc),
         loadTexture(this.gl, ASSETS.mtc2),
+        loadTexture(this.gl, ASSETS.col_map),
         loadModel(this.gl, ASSETS.cube)
       ]);
+      col_map2.flipY = false;
       cube2 = cube2.scene[0];
       return {
         mtc: mtc3,
         mtc2: mtc22,
+        col_map: col_map2,
         cube: cube2
       };
     }
@@ -10455,12 +10471,13 @@ ${addLineNumbers(fragment2)}`);
   var vertex_default = "#define MPI 3.1415926538\n#define MTAU 6.28318530718\n\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\n\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat3 normalMatrix;\n\nuniform float u_time;\n\nvarying vec3 v_normal;\nvarying vec3 v_view;\nvarying vec2 v_uv;\n\n\nvoid main() {\n  vec3 pos = position;\n\n  vec4 transformed = modelViewMatrix * vec4(pos, 1.0);\n  v_view = normalize(- transformed.xyz);\n  gl_Position = projectionMatrix * transformed;\n\n  v_normal = normalize(normalMatrix * normal);\n  v_uv = uv;\n}\n";
 
   // src/gl/mat/cube/fragment.frag
-  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\n\nvec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);\n// vec3 COL_RED = vec3(1., 0., 0.);\n// vec3 COL_YEL = vec3(1., 1., 0.);\n// vec3 COL_BLU = vec3(0., 0., 1.);\n\nuniform float u_a_hover;\n\nvoid main() {\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n    mtc = mix(COL_BG * .9, vec3(1.), mtc);\n\n    vec3 col = mtc;\n\n    float rev_split = 1. - split;\n    col = mix(mtc, mtc + .1, rev_split * u_a_hover); // * hover \n\n    \n\n\n    gl_FragColor.rgb = col;\n    // gl_FragColor.rgb = vec3(col_map);\n    gl_FragColor.a = 1.0;\n}\n";
+  var fragment_default = "precision highp float;\n\nvarying vec3 v_normal;\nvarying vec2 v_uv;\nvarying vec4 v_color;\nvarying vec3 v_view;\nuniform float u_time;\n\nuniform sampler2D u_mtc1;\nuniform sampler2D u_mtc2;\nuniform sampler2D u_col_map;\n\nvec3 COL_BG = vec3(0.058823529411764705, 0.058823529411764705, 0.058823529411764705);\n\n\nuniform float u_a_hover;\nuniform float u_a_solved;\n// uniform vec2 u_a_mouse;\n\nvoid main() {\n    vec3 color_map = texture2D(u_col_map, v_uv).rgb;\n\n    // (FRAGMENT)\n    vec3 x = normalize( vec3(v_view.z, 0., -v_view.x));\n    vec3 y = cross(v_view, x);\n    vec2 fakeUv = vec2(dot(x, v_normal), dot(y, v_normal)) * .495 + .5;\n    vec3 mtc1 = texture2D(u_mtc1, fakeUv).rgb;\n    vec3 mtc2 = texture2D(u_mtc2, fakeUv).rgb;\n\n    \n    float split = 1. - step(v_uv.y, .5);\n    float mixing_value = (1. - fakeUv.y);\n    vec3 mtc = mix(mtc1, mtc2, split);\n    mtc = mix(mtc, mtc2, split * mixing_value);\n    mtc = mix(COL_BG * .9, vec3(1.), mtc);\n\n    vec3 col = mtc;\n\n    // * hover \n    float rev_split = 1. - split;\n    col = mix(\n        mtc, \n        mtc * .1, \n        rev_split * u_a_hover\n    ); \n\n    // mix w/ color map\n    col = mix(\n        col, \n        // mtc / (1. + color_map * 1.), \n        col + color_map * .1, \n        rev_split * u_a_hover\n    ); \n\n    col = mix(\n        col, \n        col + color_map, \n        rev_split * u_a_solved\n    );\n    \n\n\n\n    \n\n\n    gl_FragColor.rgb = col;\n    // gl_FragColor.rgb = vec3(color_map);\n    gl_FragColor.a = 1.0;\n}\n\n\n    // + lights\n    // float ptl = dot(normalize(vec3(u_a_mouse.x, u_a_mouse.y, 1.)), v_normal);\n    // col *= ptl * .5;";
 
   // src/gl/mat/cube/index.js
   var cube_default = class extends Program {
     a = {
-      hover: 0
+      hover: 0,
+      solved: 0
     };
     constructor(gl, options = {}) {
       super(gl, {
@@ -10473,8 +10490,10 @@ ${addLineNumbers(fragment2)}`);
         u_time: { value: 0 },
         u_mtc1: { value: options.mtc1 },
         u_mtc2: { value: options.mtc2 },
-        u_col_map: { value: options.col_map },
-        u_a_hover: { value: 0 }
+        u_col_map: { value: window.app.gl.scene.asset.col_map },
+        u_a_hover: { value: 0 },
+        u_a_mouse: { value: [0, 0] },
+        u_a_solved: { value: 0 }
       };
     }
     set time(t2) {
@@ -11027,6 +11046,10 @@ ${addLineNumbers(fragment2)}`);
       c_hover: 0,
       click: 0
     };
+    cb = {
+      isSolved: false,
+      rotateAxis: true
+    };
     constructor(gl, { mesh, mtc1, mtc2: mtc22 } = {}) {
       super();
       this.gl = gl;
@@ -11065,7 +11088,7 @@ ${addLineNumbers(fragment2)}`);
       this.ctrl.rotation.x = 0;
       this.ctrl.rotation.z = 0;
     }
-    scramble(dur, rotateAxis = true) {
+    scramble(dur) {
       this.start++;
       if (this.start > 2)
         this.start = 0;
@@ -11081,7 +11104,7 @@ ${addLineNumbers(fragment2)}`);
           if (this.shouldReset) {
             this.resetCube();
           } else {
-            if (!rotateAxis)
+            if (!this.cb.rotateAxis)
               return;
             Math.random() > 0.5 ? this.ctrl.rotation.z = this.ctrl.rotation.z + Math.PI / 2 : this.ctrl.rotation.x = this.ctrl.rotation.x + Math.PI / 2;
           }
@@ -11135,18 +11158,49 @@ ${addLineNumbers(fragment2)}`);
           onComplete: () => locked = false
         });
       });
+      document.addEventListener("keydown", (e2) => {
+        if (e2.key === "!") {
+          this.solveCube();
+        }
+      });
     }
     /** Animations */
     mouseCta(val = 0) {
+      if (this.cb.isSolved)
+        return;
+      val > 0.5 ? this.cb.rotateAxis = false : null;
       if (this.mouseCtaAnimation)
         this.mouseCtaAnimation.kill();
       this.mouseCtaAnimation = gsapWithCSS.to(this.mat.a, {
         hover: val,
         ease: "expo.out",
-        duration: 1.2
+        duration: 1.2,
+        onComplete: () => {
+          if (val < 0.5) {
+            this.startInterval(false);
+            this.startInterval();
+          }
+        }
       });
     }
     animateFormSuccess() {
+      this.solveCube();
+    }
+    solveCube() {
+      this.cb.isSolved = true;
+      this.startInterval(false);
+      gsapWithCSS.to(this.mat.uniforms.u_a_solved, {
+        value: 1,
+        duration: 1.8,
+        delay: 0.6,
+        ease: "elastic.inOut",
+        onComplete: () => {
+          setTimeout(() => {
+            this.cb.rotateAxis = false;
+            this.startInterval();
+          }, 1e3);
+        }
+      });
     }
   };
 

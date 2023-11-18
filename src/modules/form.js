@@ -37,9 +37,15 @@ export class FormHandler {
 
   isValid() {
     let valid = true;
-    this.fields.forEach((field) => {
-      if (!field.checkValidity()) {
-        valid = false;
+    this.fields.forEach((field, i) => {
+      if (field.type === "email") {
+        if (validateEmail(field.value) == false) {
+          valid = false;
+        }
+      } else {
+        if (!field.checkValidity()) {
+          valid = false;
+        }
       }
     });
 
@@ -51,4 +57,12 @@ export class FormHandler {
       this.submitBtn.style.pointerEvents = "none";
     }
   }
+}
+
+/** Utils */
+function validateEmail(mail) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    return true;
+  }
+  return false;
 }

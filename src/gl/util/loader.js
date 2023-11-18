@@ -8,17 +8,20 @@ export class Loader {
   }
 
   async load() {
-    let [mtc, mtc2, cube] = await Promise.all([
+    let [mtc, mtc2, col_map, cube] = await Promise.all([
       loadTexture(this.gl, ASSETS.mtc),
       loadTexture(this.gl, ASSETS.mtc2),
+      loadTexture(this.gl, ASSETS.col_map),
       loadModel(this.gl, ASSETS.cube),
     ]);
 
+    col_map.flipY = false;
     cube = cube.scene[0];
 
     return {
       mtc,
       mtc2,
+      col_map,
       cube,
     };
   }
