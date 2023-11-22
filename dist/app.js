@@ -10743,7 +10743,7 @@ ${addLineNumbers(fragment2)}`);
       const black = getComputedStyle(document.documentElement).getPropertyValue(
         "--black"
       );
-      const colors = ["#009b48", "#b71234", "#0046ad"];
+      const colors = ["#b71234", "#0046ad"];
       gsapWithCSS.to("html", {
         "--black": colors[Math.floor(Math.random() * colors.length)],
         duration: 1.2,

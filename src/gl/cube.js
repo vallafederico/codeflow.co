@@ -187,7 +187,6 @@ export class Cube extends Transform {
   /** Animations */
   mouseCta(val = 0) {
     if (this.cb.isSolved) return;
-    // console.log("cta", val);
 
     val > 0.5 ? (this.cb.rotateAxis = false) : null;
 
@@ -236,7 +235,7 @@ export class Cube extends Transform {
     const black = getComputedStyle(document.documentElement).getPropertyValue(
       "--black"
     );
-    const colors = ["#009b48", "#b71234", "#0046ad"];
+    const colors = ["#b71234", "#0046ad"];
 
     Tween.to("html", {
       "--black": colors[Math.floor(Math.random() * colors.length)],
