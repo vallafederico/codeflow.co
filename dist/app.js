@@ -11090,7 +11090,7 @@ ${addLineNumbers(fragment2)}`);
     startInterval(start = true) {
       let d = 0.8;
       if (start) {
-        this.interval = setInterval(() => this.scramble(d), d * 1100);
+        this.interval = setInterval(() => this.scramble(d), d * 2100);
       } else {
         this.shouldReset = true;
         clearInterval(this.interval);
@@ -11139,7 +11139,7 @@ ${addLineNumbers(fragment2)}`);
       let z = 0;
       let y = 0;
       if (!window.isDebug) {
-        y = window.sscroll.percent * 0.4 + // move up on percent
+        y = window.sscroll.percent * 0.45 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial;
         this.a.scale = 0.1 + window.sscroll.percent * (window.isMobile ? 0 : 0.05) + this.mat.a.hover * 0.02;
@@ -11207,11 +11207,17 @@ ${addLineNumbers(fragment2)}`);
     solveCube() {
       this.cb.isSolved = true;
       this.startInterval(false);
+      const colors = ["#009b48", "#b71234", "#0046ad"];
+      gsapWithCSS.to("html", {
+        "--black": colors[Math.floor(Math.random() * colors.length)],
+        duration: 1.2,
+        delay: 0.4
+      });
       gsapWithCSS.to(this.mat.uniforms.u_a_solved, {
         value: 1,
         duration: 1.8,
         delay: 0.4,
-        ease: "elastic.inOut",
+        ease: "elastic.out",
         onComplete: () => {
           setTimeout(() => {
             this.cb.rotateAxis = false;
@@ -11245,7 +11251,7 @@ ${addLineNumbers(fragment2)}`);
       this.cube.setParent(this.g);
       this.g.setParent(this);
       if (!window.isDebug)
-        this.g.position.y -= 0.4;
+        this.g.position.y -= 0.5;
     }
     render(t2) {
       if (!this.isOn)

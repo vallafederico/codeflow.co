@@ -60,7 +60,7 @@ export class Cube extends Transform {
     // this.cb.rotateAxis = true;
 
     if (start) {
-      this.interval = setInterval(() => this.scramble(d), d * 1100);
+      this.interval = setInterval(() => this.scramble(d), d * 2100);
     } else {
       this.shouldReset = true;
       clearInterval(this.interval);
@@ -122,7 +122,7 @@ export class Cube extends Transform {
     if (!window.isDebug) {
       // position y
       y =
-        window.sscroll.percent * 0.4 + // move up on percent
+        window.sscroll.percent * 0.45 + // move up on percent
         this.a.lspeed + // move on speed
         this.a.initial; // initial animation
 
@@ -215,11 +215,22 @@ export class Cube extends Transform {
     this.cb.isSolved = true;
     this.startInterval(false);
 
+    // document.querySelector(":root").style.setProperty("--black", "red");
+    const colors = ["#009b48", "#b71234", "#0046ad"];
+
+    Tween.to("html", {
+      "--black": colors[Math.floor(Math.random() * colors.length)],
+      duration: 1.2,
+      delay: 0.4,
+    });
+
+    // console.log(rsb);
+
     Tween.to(this.mat.uniforms.u_a_solved, {
       value: 1,
       duration: 1.8,
       delay: 0.4,
-      ease: "elastic.inOut",
+      ease: "elastic.out",
       onComplete: () => {
         setTimeout(() => {
           this.cb.rotateAxis = false;
