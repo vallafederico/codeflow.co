@@ -13,6 +13,7 @@ export class FormHandler {
   initEvents() {
     //  + success handler
     const obs = new MutationObserver((mutationsList, observer) => {
+      if (window.umami) window.umami.track("Signup Success");
       window.app.gl.scene.cube.animateFormSuccess();
     });
 

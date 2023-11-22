@@ -215,15 +215,7 @@ export class Cube extends Transform {
     this.cb.isSolved = true;
     this.startInterval(false);
 
-    // document.querySelector(":root").style.setProperty("--black", "red");
-    const colors = ["#009b48", "#b71234", "#0046ad"];
-
-    Tween.to("html", {
-      "--black": colors[Math.floor(Math.random() * colors.length)],
-      duration: 1.2,
-      delay: 0.4,
-    });
-
+    this.animateBg();
     // console.log(rsb);
 
     Tween.to(this.mat.uniforms.u_a_solved, {
@@ -236,6 +228,28 @@ export class Cube extends Transform {
           this.cb.rotateAxis = false;
           this.startInterval();
         }, 1000);
+      },
+    });
+  }
+
+  animateBg() {
+    const black = getComputedStyle(document.documentElement).getPropertyValue(
+      "--black"
+    );
+    const colors = ["#009b48", "#b71234", "#0046ad"];
+
+    Tween.to("html", {
+      "--black": colors[Math.floor(Math.random() * colors.length)],
+      duration: 1.2,
+      delay: 0.4,
+      ease: "elastic.out",
+      onComplete: () => {
+        Tween.to("html", {
+          "--black": black,
+          duration: 1.2,
+          delay: 0.4,
+          ease: "slow.inOut",
+        });
       },
     });
   }

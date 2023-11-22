@@ -1,10 +1,9 @@
-// import "./style/main.css";
 import { isTablet } from "./util/device";
 
 import { Dom } from "./modules/dom";
 import { Viewport } from "./modules/viewport";
 import { Scroll } from "./modules/scroll";
-import { Pages } from "./modules/pages";
+// import { Pages } from "./modules/pages";
 import Gl from "./gl/gl";
 
 class App {

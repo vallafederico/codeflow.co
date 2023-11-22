@@ -28,9 +28,9 @@
   // node_modules/.pnpm/tiny-emitter@2.1.0/node_modules/tiny-emitter/index.js
   var require_tiny_emitter = __commonJS({
     "node_modules/.pnpm/tiny-emitter@2.1.0/node_modules/tiny-emitter/index.js"(exports, module) {
-      function E2() {
+      function E() {
       }
-      E2.prototype = {
+      E.prototype = {
         on: function(name, callback, ctx) {
           var e2 = this.e || (this.e = {});
           (e2[name] || (e2[name] = [])).push({
@@ -73,8 +73,8 @@
           return this;
         }
       };
-      module.exports = E2;
-      module.exports.TinyEmitter = E2;
+      module.exports = E;
+      module.exports.TinyEmitter = E;
     }
   });
 
@@ -2868,7 +2868,7 @@
     });
   };
   var _onMediaChange = function _onMediaChange2() {
-    var time = Date.now(), matches2 = [];
+    var time = Date.now(), matches = [];
     if (time - _lastMediaTime > 2) {
       _dispatch("matchMediaInit");
       _media.forEach(function(c) {
@@ -2883,11 +2883,11 @@
         }
         if (toggled) {
           c.revert();
-          anyMatch && matches2.push(c);
+          anyMatch && matches.push(c);
         }
       });
       _dispatch("matchMediaRevert");
-      matches2.forEach(function(c) {
+      matches.forEach(function(c) {
         return c.onMatch(c);
       });
       _lastMediaTime = time;
@@ -4984,6 +4984,8 @@
     }
     initEvents() {
       const obs = new MutationObserver((mutationsList, observer) => {
+        if (window.umami)
+          window.umami.track("Signup Success");
         window.app.gl.scene.cube.animateFormSuccess();
       });
       obs.observe(this.form.querySelector("[data-listen='success']"), {
@@ -5792,490 +5794,6 @@
     }
   };
 
-  // node_modules/.pnpm/selector-set@1.1.5/node_modules/selector-set/selector-set.next.js
-  function SelectorSet() {
-    if (!(this instanceof SelectorSet)) {
-      return new SelectorSet();
-    }
-    this.size = 0;
-    this.uid = 0;
-    this.selectors = [];
-    this.selectorObjects = {};
-    this.indexes = Object.create(this.indexes);
-    this.activeIndexes = [];
-  }
-  var docElem = window.document.documentElement;
-  var matches = docElem.matches || docElem.webkitMatchesSelector || docElem.mozMatchesSelector || docElem.oMatchesSelector || docElem.msMatchesSelector;
-  SelectorSet.prototype.matchesSelector = function(el, selector3) {
-    return matches.call(el, selector3);
-  };
-  SelectorSet.prototype.querySelectorAll = function(selectors, context3) {
-    return context3.querySelectorAll(selectors);
-  };
-  SelectorSet.prototype.indexes = [];
-  var idRe = /^#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/g;
-  SelectorSet.prototype.indexes.push({
-    name: "ID",
-    selector: function matchIdSelector(sel) {
-      var m;
-      if (m = sel.match(idRe)) {
-        return m[0].slice(1);
-      }
-    },
-    element: function getElementId(el) {
-      if (el.id) {
-        return [el.id];
-      }
-    }
-  });
-  var classRe = /^\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/g;
-  SelectorSet.prototype.indexes.push({
-    name: "CLASS",
-    selector: function matchClassSelector(sel) {
-      var m;
-      if (m = sel.match(classRe)) {
-        return m[0].slice(1);
-      }
-    },
-    element: function getElementClassNames(el) {
-      var className = el.className;
-      if (className) {
-        if (typeof className === "string") {
-          return className.split(/\s/);
-        } else if (typeof className === "object" && "baseVal" in className) {
-          return className.baseVal.split(/\s/);
-        }
-      }
-    }
-  });
-  var tagRe = /^((?:[\w\u00c0-\uFFFF\-]|\\.)+)/g;
-  SelectorSet.prototype.indexes.push({
-    name: "TAG",
-    selector: function matchTagSelector(sel) {
-      var m;
-      if (m = sel.match(tagRe)) {
-        return m[0].toUpperCase();
-      }
-    },
-    element: function getElementTagName(el) {
-      return [el.nodeName.toUpperCase()];
-    }
-  });
-  SelectorSet.prototype.indexes["default"] = {
-    name: "UNIVERSAL",
-    selector: function() {
-      return true;
-    },
-    element: function() {
-      return [true];
-    }
-  };
-  var Map2;
-  if (typeof window.Map === "function") {
-    Map2 = window.Map;
-  } else {
-    Map2 = function() {
-      function Map3() {
-        this.map = {};
-      }
-      Map3.prototype.get = function(key) {
-        return this.map[key + " "];
-      };
-      Map3.prototype.set = function(key, value) {
-        this.map[key + " "] = value;
-      };
-      return Map3;
-    }();
-  }
-  var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g;
-  function parseSelectorIndexes(allIndexes, selector3) {
-    allIndexes = allIndexes.slice(0).concat(allIndexes["default"]);
-    var allIndexesLen = allIndexes.length, i2, j, m, dup, rest = selector3, key, index, indexes = [];
-    do {
-      chunker.exec("");
-      if (m = chunker.exec(rest)) {
-        rest = m[3];
-        if (m[2] || !rest) {
-          for (i2 = 0; i2 < allIndexesLen; i2++) {
-            index = allIndexes[i2];
-            if (key = index.selector(m[1])) {
-              j = indexes.length;
-              dup = false;
-              while (j--) {
-                if (indexes[j].index === index && indexes[j].key === key) {
-                  dup = true;
-                  break;
-                }
-              }
-              if (!dup) {
-                indexes.push({ index, key });
-              }
-              break;
-            }
-          }
-        }
-      }
-    } while (m);
-    return indexes;
-  }
-  function findByPrototype(ary, proto) {
-    var i2, len, item;
-    for (i2 = 0, len = ary.length; i2 < len; i2++) {
-      item = ary[i2];
-      if (proto.isPrototypeOf(item)) {
-        return item;
-      }
-    }
-  }
-  SelectorSet.prototype.logDefaultIndexUsed = function() {
-  };
-  SelectorSet.prototype.add = function(selector3, data) {
-    var obj, i2, indexProto, key, index, objs, selectorIndexes, selectorIndex, indexes = this.activeIndexes, selectors = this.selectors, selectorObjects = this.selectorObjects;
-    if (typeof selector3 !== "string") {
-      return;
-    }
-    obj = {
-      id: this.uid++,
-      selector: selector3,
-      data
-    };
-    selectorObjects[obj.id] = obj;
-    selectorIndexes = parseSelectorIndexes(this.indexes, selector3);
-    for (i2 = 0; i2 < selectorIndexes.length; i2++) {
-      selectorIndex = selectorIndexes[i2];
-      key = selectorIndex.key;
-      indexProto = selectorIndex.index;
-      index = findByPrototype(indexes, indexProto);
-      if (!index) {
-        index = Object.create(indexProto);
-        index.map = new Map2();
-        indexes.push(index);
-      }
-      if (indexProto === this.indexes["default"]) {
-        this.logDefaultIndexUsed(obj);
-      }
-      objs = index.map.get(key);
-      if (!objs) {
-        objs = [];
-        index.map.set(key, objs);
-      }
-      objs.push(obj);
-    }
-    this.size++;
-    selectors.push(selector3);
-  };
-  SelectorSet.prototype.remove = function(selector3, data) {
-    if (typeof selector3 !== "string") {
-      return;
-    }
-    var selectorIndexes, selectorIndex, i2, j, k, selIndex, objs, obj, indexes = this.activeIndexes, selectors = this.selectors = [], selectorObjects = this.selectorObjects, removedIds = {}, removeAll = arguments.length === 1;
-    selectorIndexes = parseSelectorIndexes(this.indexes, selector3);
-    for (i2 = 0; i2 < selectorIndexes.length; i2++) {
-      selectorIndex = selectorIndexes[i2];
-      j = indexes.length;
-      while (j--) {
-        selIndex = indexes[j];
-        if (selectorIndex.index.isPrototypeOf(selIndex)) {
-          objs = selIndex.map.get(selectorIndex.key);
-          if (objs) {
-            k = objs.length;
-            while (k--) {
-              obj = objs[k];
-              if (obj.selector === selector3 && (removeAll || obj.data === data)) {
-                objs.splice(k, 1);
-                removedIds[obj.id] = true;
-              }
-            }
-          }
-          break;
-        }
-      }
-    }
-    for (i2 in removedIds) {
-      delete selectorObjects[i2];
-      this.size--;
-    }
-    for (i2 in selectorObjects) {
-      selectors.push(selectorObjects[i2].selector);
-    }
-  };
-  function sortById(a, b) {
-    return a.id - b.id;
-  }
-  SelectorSet.prototype.queryAll = function(context3) {
-    if (!this.selectors.length) {
-      return [];
-    }
-    var matches2 = {}, results = [];
-    var els = this.querySelectorAll(this.selectors.join(", "), context3);
-    var i2, j, len, len2, el, m, match, obj;
-    for (i2 = 0, len = els.length; i2 < len; i2++) {
-      el = els[i2];
-      m = this.matches(el);
-      for (j = 0, len2 = m.length; j < len2; j++) {
-        obj = m[j];
-        if (!matches2[obj.id]) {
-          match = {
-            id: obj.id,
-            selector: obj.selector,
-            data: obj.data,
-            elements: []
-          };
-          matches2[obj.id] = match;
-          results.push(match);
-        } else {
-          match = matches2[obj.id];
-        }
-        match.elements.push(el);
-      }
-    }
-    return results.sort(sortById);
-  };
-  SelectorSet.prototype.matches = function(el) {
-    if (!el) {
-      return [];
-    }
-    var i2, j, k, len, len2, len3, index, keys, objs, obj, id;
-    var indexes = this.activeIndexes, matchedIds = {}, matches2 = [];
-    for (i2 = 0, len = indexes.length; i2 < len; i2++) {
-      index = indexes[i2];
-      keys = index.element(el);
-      if (keys) {
-        for (j = 0, len2 = keys.length; j < len2; j++) {
-          if (objs = index.map.get(keys[j])) {
-            for (k = 0, len3 = objs.length; k < len3; k++) {
-              obj = objs[k];
-              id = obj.id;
-              if (!matchedIds[id] && this.matchesSelector(el, obj.selector)) {
-                matchedIds[id] = true;
-                matches2.push(obj);
-              }
-            }
-          }
-        }
-      }
-    }
-    return matches2.sort(sortById);
-  };
-
-  // node_modules/.pnpm/@unseenco+e@2.3.0/node_modules/@unseenco/e/src/utils.js
-  var eventTypes = {};
-  var listeners = {};
-  var nonBubblers = ["mouseenter", "mouseleave", "pointerenter", "pointerleave", "blur", "focus"];
-  function makeBusStack(event) {
-    if (listeners[event] === void 0) {
-      listeners[event] = [];
-    }
-  }
-  function triggerBus(event, args) {
-    if (listeners[event]) {
-      for (let i2 = 0; i2 < listeners[event].length; i2++) {
-        listeners[event][i2](...args);
-      }
-    }
-  }
-  function maybeRunQuerySelector(el) {
-    return typeof el === "string" ? document.querySelectorAll(el) : el;
-  }
-  function handleDelegation(e2) {
-    let matches2 = traverse(eventTypes[e2.type], e2.target);
-    if (matches2.length) {
-      for (let i2 = 0; i2 < matches2.length; i2++) {
-        for (let i22 = 0; i22 < matches2[i2].stack.length; i22++) {
-          if (nonBubblers.indexOf(e2.type) !== -1) {
-            addDelegateTarget(e2, matches2[i2].delegatedTarget);
-            if (e2.target === matches2[i2].delegatedTarget) {
-              matches2[i2].stack[i22].data(e2);
-            }
-          } else {
-            addDelegateTarget(e2, matches2[i2].delegatedTarget);
-            matches2[i2].stack[i22].data(e2);
-          }
-        }
-      }
-    }
-  }
-  function traverse(listeners2, target) {
-    const queue = [];
-    let node = target;
-    do {
-      if (node.nodeType !== 1) {
-        break;
-      }
-      const matches2 = listeners2.matches(node);
-      if (matches2.length) {
-        queue.push({ delegatedTarget: node, stack: matches2 });
-      }
-    } while (node = node.parentElement);
-    return queue;
-  }
-  function addDelegateTarget(event, delegatedTarget) {
-    Object.defineProperty(event, "currentTarget", {
-      configurable: true,
-      enumerable: true,
-      get: () => delegatedTarget
-    });
-  }
-  function clone(object) {
-    const copy6 = {};
-    for (const key in object) {
-      copy6[key] = [...object[key]];
-    }
-    return copy6;
-  }
-
-  // node_modules/.pnpm/@unseenco+e@2.3.0/node_modules/@unseenco/e/src/e.js
-  var E = class {
-    /**
-     * Binds all provided methods to a provided context.
-     *
-     * @param {object} context
-     * @param {string[]} [methods] Optional.
-     */
-    bindAll(context3, methods) {
-      if (!methods) {
-        methods = Object.getOwnPropertyNames(Object.getPrototypeOf(context3));
-      }
-      for (let i2 = 0; i2 < methods.length; i2++) {
-        context3[methods[i2]] = context3[methods[i2]].bind(context3);
-      }
-    }
-    /**
-     * Bind event to a string, NodeList, or element.
-     *
-     * @param {string} event
-     * @param {string|NodeList|HTMLElement|HTMLElement[]|Window|Document|function} el
-     * @param {*} [callback]
-     * @param {{}|boolean} [options]
-     */
-    on(event, el, callback, options) {
-      const events = event.split(" ");
-      for (let i2 = 0; i2 < events.length; i2++) {
-        if (typeof el === "function" && callback === void 0) {
-          makeBusStack(events[i2]);
-          listeners[events[i2]].push(el);
-          continue;
-        }
-        if (el.nodeType && el.nodeType === 1 || el === window || el === document) {
-          el.addEventListener(events[i2], callback, options);
-          continue;
-        }
-        el = maybeRunQuerySelector(el);
-        for (let n2 = 0; n2 < el.length; n2++) {
-          el[n2].addEventListener(events[i2], callback, options);
-        }
-      }
-    }
-    /**
-     * Add a delegated event.
-     *
-     * @param {string} event
-     * @param {string|NodeList|HTMLElement|Element} delegate
-     * @param {*} [callback]
-     */
-    delegate(event, delegate, callback) {
-      const events = event.split(" ");
-      for (let i2 = 0; i2 < events.length; i2++) {
-        let map2 = eventTypes[events[i2]];
-        if (map2 === void 0) {
-          map2 = new SelectorSet();
-          eventTypes[events[i2]] = map2;
-          if (nonBubblers.indexOf(events[i2]) !== -1) {
-            document.addEventListener(events[i2], handleDelegation, true);
-          } else {
-            document.addEventListener(events[i2], handleDelegation);
-          }
-        }
-        map2.add(delegate, callback);
-      }
-    }
-    /**
-     * Remove a callback from a DOM element, or one or all Bus events.
-     *
-     * @param {string} event
-     * @param {string|NodeList|HTMLElement|Element|Window|undefined} [el]
-     * @param {*} [callback]
-     * @param {{}|boolean} [options]
-     */
-    off(event, el, callback, options) {
-      const events = event.split(" ");
-      for (let i2 = 0; i2 < events.length; i2++) {
-        if (el === void 0) {
-          listeners[events[i2]] = [];
-          continue;
-        }
-        if (typeof el === "function") {
-          makeBusStack(events[i2]);
-          for (let n2 = 0; n2 < listeners[events[i2]].length; n2++) {
-            if (listeners[events[i2]][n2] === el) {
-              listeners[events[i2]].splice(n2, 1);
-            }
-          }
-          continue;
-        }
-        const map2 = eventTypes[events[i2]];
-        if (map2 !== void 0) {
-          map2.remove(el, callback);
-          if (map2.size === 0) {
-            delete eventTypes[events[i2]];
-            if (nonBubblers.indexOf(events[i2]) !== -1) {
-              document.removeEventListener(events[i2], handleDelegation, true);
-            } else {
-              document.removeEventListener(events[i2], handleDelegation);
-            }
-            continue;
-          }
-        }
-        if (el.removeEventListener !== void 0) {
-          el.removeEventListener(events[i2], callback, options);
-          continue;
-        }
-        el = maybeRunQuerySelector(el);
-        for (let n2 = 0; n2 < el.length; n2++) {
-          el[n2].removeEventListener(events[i2], callback, options);
-        }
-      }
-    }
-    /**
-     * Emit a Bus event.
-     *
-     * @param {string} event
-     * @param {...*} args
-     */
-    emit(event, ...args) {
-      triggerBus(event, args);
-    }
-    /**
-     * Return a clone of the delegated event stack for debugging.
-     *
-     * @returns {Object.<string, array>}
-     */
-    debugDelegated() {
-      return JSON.parse(JSON.stringify(eventTypes));
-    }
-    /**
-     * Return a clone of the bus event stack for debugging.
-     *
-     * @returns {Object.<string, array>}
-     */
-    debugBus() {
-      return clone(listeners);
-    }
-    /**
-     * Checks if a given bus event has listeners.
-     *
-     * @param {string} event
-     * @returns {boolean}
-     */
-    hasBus(event) {
-      return this.debugBus().hasOwnProperty(event);
-    }
-  };
-  var instance = new E();
-
-  // node_modules/.pnpm/@unseenco+taxi@1.5.1/node_modules/@unseenco/taxi/src/helpers.js
-  var parser = new DOMParser();
-
   // node_modules/.pnpm/ogl@1.0.1/node_modules/ogl/src/math/functions/Vec3Func.js
   function length(a) {
     let x = a[0];
@@ -6697,7 +6215,7 @@
       this.bindAttributes(program);
     }
     bindAttributes(program) {
-      program.attributeLocations.forEach((location2, { name, type }) => {
+      program.attributeLocations.forEach((location, { name, type }) => {
         if (!this.attributes[name]) {
           console.warn(`active attribute ${name} not being supplied`);
           return;
@@ -6716,9 +6234,9 @@
         const stride = numLoc === 1 ? 0 : numLoc * numLoc * 4;
         const offset = numLoc === 1 ? 0 : numLoc * 4;
         for (let i2 = 0; i2 < numLoc; i2++) {
-          this.gl.vertexAttribPointer(location2 + i2, size, attr.type, attr.normalized, attr.stride + stride, attr.offset + i2 * offset);
-          this.gl.enableVertexAttribArray(location2 + i2);
-          this.gl.renderer.vertexAttribDivisor(location2 + i2, attr.divisor);
+          this.gl.vertexAttribPointer(location + i2, size, attr.type, attr.normalized, attr.stride + stride, attr.offset + i2 * offset);
+          this.gl.enableVertexAttribArray(location + i2);
+          this.gl.renderer.vertexAttribDivisor(location + i2, attr.divisor);
         }
       });
       if (this.attributes.index)
@@ -6731,7 +6249,7 @@
         this.gl.renderer.bindVertexArray(this.VAOs[program.attributeOrder]);
         this.gl.renderer.currentGeometry = `${this.id}_${program.attributeOrder}`;
       }
-      program.attributeLocations.forEach((location2, { name }) => {
+      program.attributeLocations.forEach((location, { name }) => {
         const attr = this.attributes[name];
         if (attr.needsUpdate)
           this.updateAttribute(attr);
@@ -6910,11 +6428,11 @@ ${addLineNumbers(fragment2)}`);
       const numAttribs = gl.getProgramParameter(this.program, gl.ACTIVE_ATTRIBUTES);
       for (let aIndex = 0; aIndex < numAttribs; aIndex++) {
         const attribute = gl.getActiveAttrib(this.program, aIndex);
-        const location2 = gl.getAttribLocation(this.program, attribute.name);
-        if (location2 === -1)
+        const location = gl.getAttribLocation(this.program, attribute.name);
+        if (location === -1)
           continue;
-        locations[location2] = attribute.name;
-        this.attributeLocations.set(attribute, location2);
+        locations[location] = attribute.name;
+        this.attributeLocations.set(attribute, location);
       }
       this.attributeOrder = locations.join("");
     }
@@ -6959,7 +6477,7 @@ ${addLineNumbers(fragment2)}`);
         this.gl.useProgram(this.program);
         this.gl.renderer.state.currentProgram = this.id;
       }
-      this.uniformLocations.forEach((location2, activeUniform) => {
+      this.uniformLocations.forEach((location, activeUniform) => {
         let uniform = this.uniforms[activeUniform.uniformName];
         for (const component of activeUniform.nameComponents) {
           if (!uniform)
@@ -6982,7 +6500,7 @@ ${addLineNumbers(fragment2)}`);
         if (uniform.value.texture) {
           textureUnit = textureUnit + 1;
           uniform.value.update(textureUnit);
-          return setUniform(this.gl, activeUniform.type, location2, textureUnit);
+          return setUniform(this.gl, activeUniform.type, location, textureUnit);
         }
         if (uniform.value.length && uniform.value[0].texture) {
           const textureUnits = [];
@@ -6991,9 +6509,9 @@ ${addLineNumbers(fragment2)}`);
             value.update(textureUnit);
             textureUnits.push(textureUnit);
           });
-          return setUniform(this.gl, activeUniform.type, location2, textureUnits);
+          return setUniform(this.gl, activeUniform.type, location, textureUnits);
         }
-        setUniform(this.gl, activeUniform.type, location2, uniform.value);
+        setUniform(this.gl, activeUniform.type, location, uniform.value);
       });
       this.applyState();
       if (flipFaces)
@@ -7003,52 +6521,52 @@ ${addLineNumbers(fragment2)}`);
       this.gl.deleteProgram(this.program);
     }
   };
-  function setUniform(gl, type, location2, value) {
+  function setUniform(gl, type, location, value) {
     value = value.length ? flatten(value) : value;
-    const setValue = gl.renderer.state.uniformLocations.get(location2);
+    const setValue = gl.renderer.state.uniformLocations.get(location);
     if (value.length) {
       if (setValue === void 0 || setValue.length !== value.length) {
-        gl.renderer.state.uniformLocations.set(location2, value.slice(0));
+        gl.renderer.state.uniformLocations.set(location, value.slice(0));
       } else {
         if (arraysEqual(setValue, value))
           return;
         setValue.set ? setValue.set(value) : setArray(setValue, value);
-        gl.renderer.state.uniformLocations.set(location2, setValue);
+        gl.renderer.state.uniformLocations.set(location, setValue);
       }
     } else {
       if (setValue === value)
         return;
-      gl.renderer.state.uniformLocations.set(location2, value);
+      gl.renderer.state.uniformLocations.set(location, value);
     }
     switch (type) {
       case 5126:
-        return value.length ? gl.uniform1fv(location2, value) : gl.uniform1f(location2, value);
+        return value.length ? gl.uniform1fv(location, value) : gl.uniform1f(location, value);
       case 35664:
-        return gl.uniform2fv(location2, value);
+        return gl.uniform2fv(location, value);
       case 35665:
-        return gl.uniform3fv(location2, value);
+        return gl.uniform3fv(location, value);
       case 35666:
-        return gl.uniform4fv(location2, value);
+        return gl.uniform4fv(location, value);
       case 35670:
       case 5124:
       case 35678:
       case 35680:
-        return value.length ? gl.uniform1iv(location2, value) : gl.uniform1i(location2, value);
+        return value.length ? gl.uniform1iv(location, value) : gl.uniform1i(location, value);
       case 35671:
       case 35667:
-        return gl.uniform2iv(location2, value);
+        return gl.uniform2iv(location, value);
       case 35672:
       case 35668:
-        return gl.uniform3iv(location2, value);
+        return gl.uniform3iv(location, value);
       case 35673:
       case 35669:
-        return gl.uniform4iv(location2, value);
+        return gl.uniform4iv(location, value);
       case 35674:
-        return gl.uniformMatrix2fv(location2, false, value);
+        return gl.uniformMatrix2fv(location, false, value);
       case 35675:
-        return gl.uniformMatrix3fv(location2, false, value);
+        return gl.uniformMatrix3fv(location, false, value);
       case 35676:
-        return gl.uniformMatrix4fv(location2, false, value);
+        return gl.uniformMatrix4fv(location, false, value);
     }
   }
   function addLineNumbers(string) {
@@ -7098,7 +6616,7 @@ ${addLineNumbers(fragment2)}`);
   // node_modules/.pnpm/ogl@1.0.1/node_modules/ogl/src/core/Renderer.js
   var tempVec32 = new Vec3();
   var ID3 = 1;
-  var Renderer2 = class {
+  var Renderer = class {
     constructor({
       canvas = document.createElement("canvas"),
       width = 300,
@@ -11207,12 +10725,7 @@ ${addLineNumbers(fragment2)}`);
     solveCube() {
       this.cb.isSolved = true;
       this.startInterval(false);
-      const colors = ["#009b48", "#b71234", "#0046ad"];
-      gsapWithCSS.to("html", {
-        "--black": colors[Math.floor(Math.random() * colors.length)],
-        duration: 1.2,
-        delay: 0.4
-      });
+      this.animateBg();
       gsapWithCSS.to(this.mat.uniforms.u_a_solved, {
         value: 1,
         duration: 1.8,
@@ -11223,6 +10736,26 @@ ${addLineNumbers(fragment2)}`);
             this.cb.rotateAxis = false;
             this.startInterval();
           }, 1e3);
+        }
+      });
+    }
+    animateBg() {
+      const black = getComputedStyle(document.documentElement).getPropertyValue(
+        "--black"
+      );
+      const colors = ["#009b48", "#b71234", "#0046ad"];
+      gsapWithCSS.to("html", {
+        "--black": colors[Math.floor(Math.random() * colors.length)],
+        duration: 1.2,
+        delay: 0.4,
+        ease: "elastic.out",
+        onComplete: () => {
+          gsapWithCSS.to("html", {
+            "--black": black,
+            duration: 1.2,
+            delay: 0.4,
+            ease: "slow.inOut"
+          });
         }
       });
     }
@@ -11272,7 +10805,7 @@ ${addLineNumbers(fragment2)}`);
       this.vp = {
         dpr: Math.min(window.devicePixelRatio, 2)
       };
-      this.renderer = new Renderer2({ dpr: 2, antialias: true, alpha: true });
+      this.renderer = new Renderer({ dpr: 2, antialias: true, alpha: true });
       this.gl = this.renderer.gl;
       this.gl.clearColor(0, 0, 0, 0);
       this.wrapper.appendChild(this.gl.canvas);
