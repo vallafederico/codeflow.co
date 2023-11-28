@@ -40,9 +40,9 @@ export class FormHandler {
     let valid = true;
     this.fields.forEach((field, i) => {
       if (field.type === "email") {
-        if (validateEmail(field.value) == false) {
-          valid = false;
-        }
+        // if (validateEmail(field.value) == false) {
+        // valid = false;
+        // }
       } else {
         if (!field.checkValidity()) {
           valid = false;
